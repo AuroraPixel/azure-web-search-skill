@@ -1,4 +1,4 @@
-"""所有搜索模式对比示例"""
+"""搜索模式对比示例（快速搜索 vs 智能体搜索）"""
 
 import sys
 from pathlib import Path
@@ -18,7 +18,7 @@ console = Console()
 
 
 def main():
-    """演示所有搜索模式"""
+    """演示两种搜索模式"""
     # 检查环境文件
     if not setup_env_file():
         return
@@ -72,30 +72,6 @@ def main():
     except Exception as e:
         console.print(f"[red]❌ 失败：{e}[/red]")
         console.print("[yellow]提示：智能体模式需要支持推理的模型[/yellow]")
-
-    # 3. 深度研究模式
-    console.print("\n" + "=" * 80)
-    console.print(Panel(
-        "[cyan]模式 3：深度研究（Deep Research）[/cyan]\n"
-        "特点：多步骤深入研究，适合复杂主题\n"
-        "⚠️  注意：此模式可能运行较长时间（数分钟）",
-        border_style="cyan"
-    ))
-
-    console.print("[yellow]💡 深度研究模式演示已跳过（需要较长时间）[/yellow]")
-    console.print("[yellow]   如需测试，请取消下方代码的注释[/yellow]\n")
-
-    # 取消注释以测试深度研究模式
-    # try:
-    #     console.print(f"🔍 研究主题：{query}\n")
-    #     console.print("[yellow]⏳ 正在进行深度研究，可能需要几分钟...[/yellow]\n")
-    #     
-    #     result = search_client.deep_research(query)
-    #     console.print(Panel(result.text[:500] + "...", title="研究报告摘要", border_style="green"))
-    #     console.print(f"[yellow]📚 引用：{len(result.citations)} 个[/yellow]")
-    #     console.print(f"[blue]🔄 搜索调用：{len(result.search_calls)} 次[/blue]")
-    # except Exception as e:
-    #     console.print(f"[red]❌ 失败：{e}[/red]")
 
     console.print("\n" + "=" * 80)
     console.print("[green]✅ 演示完成！[/green]\n")

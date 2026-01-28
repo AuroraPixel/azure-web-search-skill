@@ -36,12 +36,11 @@ def show_menu() -> str:
     console.print("请选择搜索模式：", style="bold yellow")
     console.print("  [1] 快速搜索 (Quick Search) - 快速获取结果", style="green")
     console.print("  [2] 智能体搜索 (Agentic Search) - 带推理的搜索", style="blue")
-    console.print("  [3] 深度研究 (Deep Research) - 深入分析", style="magenta")
-    console.print("  [4] 更改国家/地区", style="yellow")
+    console.print("  [3] 更改国家/地区", style="yellow")
     console.print("  [0] 退出", style="red")
     console.print("=" * 60 + "\n", style="cyan")
 
-    choice = Prompt.ask("请输入选项", choices=["0", "1", "2", "3", "4"], default="1")
+    choice = Prompt.ask("请输入选项", choices=["0", "1", "2", "3"], default="1")
     return choice
 
 
@@ -120,7 +119,7 @@ def main():
                 console.print("\n[cyan]👋 感谢使用，再见！[/cyan]\n")
                 break
 
-            elif choice == "4":
+            elif choice == "3":
                 # 更改国家
                 console.print("\n[yellow]💡 请输入国家代码（ISO 3166-1 alpha-2），例如：US, CN, JP[/yellow]")
                 console.print("[yellow]   输入 'none' 清除国家设置[/yellow]")
@@ -159,15 +158,6 @@ def main():
             elif choice == "2":
                 result = search_client.agentic_search(query, country=current_country)
                 display_result(result, "智能体搜索")
-
-            elif choice == "3":
-                console.print("[yellow]⚠️  深度研究可能需要数分钟时间...[/yellow]")
-                confirm = Prompt.ask("确认继续", choices=["y", "n"], default="n")
-                if confirm.lower() == "y":
-                    result = search_client.deep_research(query, country=current_country)
-                    display_result(result, "深度研究")
-                else:
-                    console.print("[yellow]已取消[/yellow]")
 
         except KeyboardInterrupt:
             console.print("\n\n[yellow]⚠️  操作已取消[/yellow]")
