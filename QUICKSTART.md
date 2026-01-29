@@ -2,6 +2,8 @@
 
 这是一个 5 分钟快速入门指南，帮助你快速开始使用 Azure Web Search。
 
+> 🤖 **想在 Claude Desktop 中使用？** 查看 [MCP Server 快速开始](QUICKSTART_MCP.md)！
+
 ## 📋 前置要求
 
 1. **Python 3.10+** 已安装
@@ -85,6 +87,19 @@ AZURE_OPENAI_MODEL=gpt-4o
 5. 在 [Azure OpenAI Studio](https://oai.azure.com/) 中创建模型部署，记下部署名称 → `AZURE_OPENAI_MODEL`
 
 ## 🎯 开始使用
+
+### 方式 0：作为 Claude Desktop 工具（最强大）
+
+将此项目配置为 MCP Server，在 Claude Desktop 中直接使用：
+
+```powershell
+# 运行安装脚本
+.\install_mcp.ps1  # Windows
+# 或
+./install_mcp.sh   # macOS/Linux
+```
+
+详见：[QUICKSTART_MCP.md](QUICKSTART_MCP.md)
 
 ### 方式 1：交互式程序（最简单）
 

@@ -1,5 +1,131 @@
 # 更新日志
 
+## [2026-01-28] - 新增 MCP Server 支持
+
+### 🚀 重大新功能
+- **MCP Server 集成**
+  - 添加了 Model Context Protocol (MCP) Server 支持
+  - 可以在 Claude Desktop 中作为工具直接使用
+  - 提供三个工具：`web_search_quick`、`web_search_agentic`、`web_search_deep`
+  
+### 📝 新增文件
+1. **`mcp_server.py`** - MCP Server 主程序
+   - 实现了 MCP 协议的 Server 端
+   - 将 Web Search 功能封装为 Claude 可调用的工具
+   - 支持异步操作和标准输入输出
+
+2. **`install_mcp.ps1`** / **`install_mcp.sh`** - 自动安装脚本
+   - Windows PowerShell 和 macOS/Linux Shell 脚本
+   - 自动配置 Claude Desktop
+   - 一键安装所有依赖和配置
+
+3. **`test_mcp_server.py`** - MCP Server 测试脚本
+   - 5 个全面的配置检查测试
+   - 验证依赖、环境配置、客户端、服务器文件和 Claude 配置
+
+4. **`MCP_SETUP.md`** - 详细配置指南
+   - 完整的 MCP Server 设置步骤
+   - 故障排查指南
+   - 使用示例和最佳实践
+
+5. **`QUICKSTART_MCP.md`** - MCP 快速开始指南
+   - 5 分钟快速配置指南
+   - 简化的安装步骤
+   - 常见问题和解决方案
+
+6. **`claude_desktop_config.json`** - Claude 配置示例
+   - MCP Server 配置模板
+   - 适用于不同操作系统
+
+### 📦 依赖更新
+- **新增依赖**: `mcp>=1.1.2`
+  - 添加到 `pyproject.toml` 的 dependencies 列表
+  - 支持 Model Context Protocol 标准
+
+### 📖 文档更新
+1. **`README.md`**
+   - 在特性列表中添加了 MCP Server 支持
+   - 新增"MCP Server 功能"章节
+   - 更新了"使用方式"章节，增加"方式 1: 作为 MCP Server 使用"
+   - 更新了参考文档链接
+
+2. **`QUICKSTART.md`**
+   - 添加了 MCP Server 快速开始的提示
+   - 新增"方式 0: 作为 Claude Desktop 工具"
+   - 添加了 MCP 相关文档链接
+
+### 🎯 可用的 MCP 工具
+
+#### 1. web_search_quick
+- **功能**: 快速网络搜索（无推理）
+- **参数**: 
+  - `query` (必需): 搜索查询字符串
+  - `country` (可选): 国家代码，如 US、CN、JP
+- **适用**: 时效性信息、快速查询
+
+#### 2. web_search_agentic
+- **功能**: 智能体搜索（带推理）
+- **参数**: 
+  - `query` (必需): 搜索查询字符串
+  - `country` (可选): 国家代码
+- **适用**: 复杂查询、需要分析的问题
+
+#### 3. web_search_deep
+- **功能**: 深度研究搜索
+- **参数**: 
+  - `query` (必需): 研究主题
+  - `country` (可选): 国家代码
+  - `include_code_interpreter` (可选): 是否包含代码解释器
+- **适用**: 学术研究、深度调查
+- **注意**: 需要 o3-deep-research 模型
+
+### 🔧 使用方式
+
+#### 快速安装
+```powershell
+# Windows
+.\install_mcp.ps1
+
+# macOS/Linux
+chmod +x install_mcp.sh
+./install_mcp.sh
+```
+
+#### 验证安装
+```bash
+python test_mcp_server.py
+```
+
+#### 在 Claude Desktop 中使用
+```
+使用 web search 搜索 "2026年人工智能发展趋势"
+```
+
+### 💡 技术实现
+- 使用 `mcp` Python 包实现协议
+- 通过 stdio 与 Claude Desktop 通信
+- JSON-RPC 格式的工具调用
+- 异步处理搜索请求
+- 完整的错误处理和日志记录
+
+### 📊 项目结构更新
+```
+azure-web-search/
+├── mcp_server.py              # MCP Server 主程序（新增）
+├── install_mcp.ps1            # Windows 安装脚本（新增）
+├── install_mcp.sh             # macOS/Linux 安装脚本（新增）
+├── test_mcp_server.py         # MCP 测试脚本（新增）
+├── MCP_SETUP.md               # 详细配置指南（新增）
+├── QUICKSTART_MCP.md          # 快速开始指南（新增）
+├── claude_desktop_config.json # 配置示例（新增）
+├── src/                       # 核心代码
+├── examples/                  # 使用示例
+├── tests/                     # 单元测试
+└── ...
+```
+
+---
+
 ## [2026-01-28] - 移除深度研究功能
 
 ### 🗑️ 移除的功能

@@ -1,0 +1,34 @@
+# Cursor MCP Server Configuration for Azure Web Search
+
+This project is configured as an MCP Server for Cursor IDE.
+
+## MCP Server Details
+
+**Server Name**: azure-web-search
+
+**Available Tools**:
+1. `web_search_quick` - Fast web search (no reasoning)
+2. `web_search_agentic` - Agentic search (with reasoning)
+3. `web_search_deep` - Deep research (comprehensive)
+
+## How Cursor Uses This Server
+
+When you interact with Cursor AI, it can automatically use these web search tools to:
+- Find up-to-date information
+- Research topics
+- Get citations and sources
+- Search by geographic location
+
+## Configuration Location
+
+For Cursor, the MCP server configuration should be in:
+- Windows: `%APPDATA%\Cursor\User\globalStorage\mcp.json`
+- macOS: `~/Library/Application Support/Cursor/User/globalStorage/mcp.json`
+- Linux: `~/.config/Cursor/User/globalStorage/mcp.json`
+
+## Example Usage in Cursor
+
+When working in Cursor, the AI can automatically invoke these tools when needed:
+- "Search for the latest Python 3.12 features"
+- "Find information about AI regulations in the US"
+- "Research quantum computing advancements"

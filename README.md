@@ -9,6 +9,7 @@
   - 智能体搜索（Agentic Search）：带推理的多步骤搜索
   - 深度研究（Deep Research）：深入的多源研究分析
 
+- 🤖 **MCP Server 支持**：可作为 Claude Desktop 的 MCP Server 使用
 - 🌍 **地理位置支持**：根据不同国家/地区定制搜索结果
 - 📚 **自动引用管理**：自动提取和管理 URL 引用
 - 🎨 **美观的输出**：使用 Rich 库提供漂亮的终端输出
@@ -37,6 +38,8 @@ azure-web-search/
 ```
 
 ## 🚀 快速开始
+
+> 💡 **想在 Claude Desktop 中使用？** 查看 [MCP_SETUP.md](MCP_SETUP.md) 了解如何配置为 MCP Server！
 
 ### 1. 环境准备
 
@@ -109,9 +112,22 @@ LOG_LEVEL=INFO
 source .venv/bin/activate
 ```
 
-## 📖 使用示例
+## 📖 使用方式
 
-### 基础搜索
+### 方式 1：作为 MCP Server 使用（推荐）
+
+将此项目配置为 Claude Desktop 的 MCP Server，直接在 Claude 对话中使用 Web Search 功能。
+
+详细配置步骤请查看：**[MCP_SETUP.md](MCP_SETUP.md)**
+
+配置完成后，在 Claude Desktop 中可以这样使用：
+```
+请使用 web search 搜索"2026年人工智能发展趋势"
+```
+
+### 方式 2：作为 Python 库使用
+
+#### 基础搜索
 
 ```bash
 python examples/basic_search.py
@@ -274,9 +290,22 @@ pytest
    - Agentic Search：可能需要 10-30 秒
    - Deep Research：可能需要数分钟
 
+## 🤖 MCP Server 功能
+
+本项目支持作为 Model Context Protocol (MCP) Server 运行，可以集成到 Claude Desktop 中。
+
+**支持的工具：**
+- `web_search_quick` - 快速搜索
+- `web_search_agentic` - 智能体搜索  
+- `web_search_deep` - 深度研究
+
+**配置指南：** 查看 [MCP_SETUP.md](MCP_SETUP.md) 了解详细配置步骤
+
 ## 📚 参考文档
 
+- [MCP Server 配置指南](MCP_SETUP.md) - 如何配置为 Claude Desktop 工具
 - [Azure OpenAI Web Search 官方文档](https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/web-search)
+- [Model Context Protocol](https://modelcontextprotocol.io/) - MCP 协议文档
 - [Grounding with Bing 使用条款](https://www.microsoft.com/licensing/terms)
 - [Azure OpenAI 定价](https://azure.microsoft.com/pricing/details/cognitive-services/openai-service/)
 

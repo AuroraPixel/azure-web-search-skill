@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "azure-web-search": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:\\remote\\web-search",
+        "run",
+        "python",
+        "mcp_server.py"
+      ],
+      "env": {
+        "PYTHONPATH": "D:\\remote\\web-search"
+      }
+    }
+  }
+}
