@@ -2,6 +2,12 @@
   "name": "azure-web-search-mcp",
   "private": true,
   "type": "module",
+  "clawdbot": {
+    "extensions": ["./index.ts"]
+  },
+  "moltbot": {
+    "extensions": ["./index.ts"]
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.25.3"
   }
