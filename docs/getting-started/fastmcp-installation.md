@@ -103,7 +103,7 @@ MCP Server 会自动启动并加载 FastMCP 框架。
 2. 输入测试查询：
 
 ```
-使用 web_search_quick 搜索 "FastMCP 框架"
+使用 azure_web_search（mode=quick）搜索 "FastMCP 框架"
 ```
 
 3. 查看结果是否正常返回

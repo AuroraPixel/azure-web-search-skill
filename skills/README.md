@@ -34,13 +34,12 @@ skills/
 - Comprehensive research
 
 **Tools Used**:
-- `web_search_quick` - Quick search
-- `web_search_agentic` - Agentic search
+- `azure_web_search` - Unified search tool (`mode=quick|agentic`)
 
 **Typical Workflow**:
 ```
-1. web_search_quick - Understand topic overview
-2. web_search_agentic - Deep analysis of key points
+1. azure_web_search (mode=quick) - Understand topic overview
+2. azure_web_search (mode=agentic) - Deep analysis of key points
 3. Generate complete research report
 ```
 
@@ -63,13 +62,12 @@ skills/
 - Trend prediction
 
 **Tools Used**:
-- `web_search_quick` - Get latest information
-- `web_search_agentic` - Deep analysis
+- `azure_web_search` - Unified search tool (`mode=quick|agentic`)
 
 **Typical Workflow**:
 ```
-1. web_search_quick - Get latest reports
-2. web_search_agentic - Analyze impact and trends
+1. azure_web_search (mode=quick) - Get latest reports
+2. azure_web_search (mode=agentic) - Analyze impact and trends
 3. Generate news analysis report
 ```
 
@@ -150,9 +148,7 @@ Brief description of skill's purpose and focus
 ### ❌ Should Avoid
 
 ## Tool Usage Guide
-### web_search_quick
-...
-### web_search_agentic
+### azure_web_search
 ...
 
 ## Common Use Cases

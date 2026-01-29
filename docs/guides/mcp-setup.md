@@ -296,7 +296,7 @@ python test_mcp_server.py
 1. 打开 Claude Desktop
 2. 输入测试查询：
    ```
-   使用 web_search_quick 搜索 "Python 3.12 新特性"
+   使用 azure_web_search（mode=quick）搜索 "Python 3.12 新特性"
    ```
 3. 查看结果
 
@@ -312,16 +312,17 @@ MCP Server 的日志会输出到终端，可以看到：
 
 MCP Server 提供以下工具：
 
-### 1. web_search_quick
+### 1. azure_web_search
 
-快速搜索，无推理
+统一搜索工具（通过 `mode` 区分快速/推理）：
 
 ```json
 {
-  "name": "web_search_quick",
-  "description": "执行快速网络搜索（无推理）",
+  "name": "azure_web_search",
+  "description": "Azure OpenAI Web Search（统一入口）",
   "parameters": {
     "query": "搜索查询（必需）",
+    "mode": "quick 或 agentic（可选，默认 quick）",
     "country": "国家代码（可选）"
   }
 }
@@ -329,27 +330,8 @@ MCP Server 提供以下工具：
 
 **使用示例**：
 ```
-使用 web_search_quick 搜索 "2026年人工智能趋势"
-```
-
-### 2. web_search_agentic
-
-智能体搜索，带推理
-
-```json
-{
-  "name": "web_search_agentic",
-  "description": "执行智能体搜索（带推理）",
-  "parameters": {
-    "query": "搜索查询（必需）",
-    "country": "国家代码（可选）"
-  }
-}
-```
-
-**使用示例**：
-```
-使用 web_search_agentic 分析 "量子计算在密码学中的应用"
+使用 azure_web_search（mode=quick）搜索 "2026年人工智能趋势"
+使用 azure_web_search（mode=agentic）分析 "量子计算在密码学中的应用"
 ```
 
 ## 🎨 Skills Provider 功能
@@ -513,8 +495,8 @@ LOG_LEVEL=ERROR  # 仅错误
 ## 🎓 最佳实践
 
 1. **使用合适的搜索模式**
-   - 简单查询 → `web_search_quick`
-   - 复杂查询 → `web_search_agentic`
+   - 简单查询 → `azure_web_search`（mode=`quick`）
+   - 复杂查询 → `azure_web_search`（mode=`agentic`）
 
 2. **利用技能系统**
    - 复用预定义的技能模板

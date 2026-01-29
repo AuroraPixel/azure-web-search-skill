@@ -109,7 +109,7 @@ uv pip install --force-reinstall -e .
 搜索美国地区的 AI 政策
 
 # 深入分析
-使用 web_search_agentic 分析量子计算的应用前景
+使用 azure_web_search（mode=agentic）分析量子计算的应用前景
 ```
 
 ---

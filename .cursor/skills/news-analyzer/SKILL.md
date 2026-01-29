@@ -15,14 +15,14 @@ This skill specializes in using Azure OpenAI Web Search for real-time news searc
 
 ### 1. Real-Time News Search
 
-Uses `web_search_quick` tool:
+Uses `azure_web_search` tool (mode=`quick`):
 - **Fast Retrieval**: Second-level response for latest news
 - **Broad Coverage**: Multiple news sources
 - **Strong Timeliness**: Latest reports and information
 
 ### 2. News Deep Analysis
 
-Uses `web_search_agentic` tool:
+Uses `azure_web_search` tool (mode=`agentic`):
 - **Multi-Angle Analysis**: Understand different media reporting angles
 - **Background Analysis**: Analyze deep causes of events
 - **Impact Assessment**: Evaluate news impact and significance
@@ -39,7 +39,7 @@ Uses `web_search_agentic` tool:
 
 ```
 Event: Major tech company merger
-Tool: web_search_quick
+Tool: azure_web_search (mode=quick)
 Goal: Quickly get latest information
 ```
 
@@ -47,7 +47,7 @@ Goal: Quickly get latest information
 
 ```
 Topic: "2026 AI policy changes"
-Tool: web_search_agentic
+Tool: azure_web_search (mode=agentic)
 Goal: Deep analysis of policy impact
 ```
 
@@ -55,8 +55,8 @@ Goal: Deep analysis of policy impact
 
 ```
 Process:
-1. web_search_quick - Get latest industry news
-2. web_search_agentic - Analyze trends and changes
+1. azure_web_search (mode=quick) - Get latest industry news
+2. azure_web_search (mode=agentic) - Analyze trends and changes
 Expected: Complete industry dynamics report
 ```
 
@@ -64,7 +64,7 @@ Expected: Complete industry dynamics report
 
 ### Phase 1: Quick Scanning
 
-Use `web_search_quick` to get latest information:
+Use `azure_web_search` (mode=`quick`) to get latest information:
 
 **Goals**:
 - Get latest reports
@@ -78,7 +78,7 @@ Use `web_search_quick` to get latest information:
 
 ### Phase 2: Deep Analysis
 
-Use `web_search_agentic` for in-depth analysis:
+Use `azure_web_search` (mode=`agentic`) for in-depth analysis:
 
 **Goals**:
 - Analyze reporting angles
@@ -161,7 +161,7 @@ Use `web_search_agentic` for in-depth analysis:
 
 ## Best Practices
 
-### ✅ Should Do
+### Should Do
 
 1. **Prioritize Quick Search**
    - Quickly get latest news
@@ -183,7 +183,7 @@ Use `web_search_agentic` for in-depth analysis:
    - Identify reporting bias
    - Synthesize multiple sources
 
-### ❌ Should Avoid
+### Should Avoid
 
 1. **Rely on Single Source**
    - Different media have different angles
@@ -203,7 +203,7 @@ Use `web_search_agentic` for in-depth analysis:
 
 ## Tool Usage Guide
 
-### web_search_quick (News Quick Retrieval)
+### azure_web_search (News Search)
 
 **Best Use Cases**:
 - Breaking news tracking
@@ -214,33 +214,20 @@ Use `web_search_agentic` for in-depth analysis:
 **Usage Tips**:
 ```
 # Search latest news
-web_search_quick("2026 AI news")
+azure_web_search("2026 AI news", mode="quick")
 
 # Search specific topic
-web_search_quick("Tesla Cybertruck delivery", country="US")
+azure_web_search("Tesla Cybertruck delivery", mode="quick", country="US")
 
 # Search industry dynamics
-web_search_quick("China new energy policy", country="CN")
+azure_web_search("China new energy policy", mode="quick", country="CN")
 ```
 
-### web_search_agentic (News Deep Analysis)
-
-**Best Use Cases**:
-- Complex event analysis
-- Multi-angle report comparison
-- Impact assessment
-- Trend prediction
-
-**Usage Tips**:
+For deep analysis, use `mode="agentic"`:
 ```
-# Analyze policy impact
-web_search_agentic("Impact of US AI regulation policy on industry")
-
-# Analyze technology trends
-web_search_agentic("Quantum computing development status and challenges")
-
-# Comparative analysis
-web_search_agentic("Different companies' positions on AI safety")
+azure_web_search("Impact of US AI regulation policy on industry", mode="agentic")
+azure_web_search("Quantum computing development status and challenges", mode="agentic")
+azure_web_search("Different companies' positions on AI safety", mode="agentic")
 ```
 
 ## Related Resources

@@ -16,13 +16,13 @@ This skill specializes in using Azure OpenAI Web Search for efficient informatio
 ### 1. Dual-Mode Search
 
 #### Quick Search
-Uses `web_search_quick` tool:
+Uses `azure_web_search` tool (mode=`quick`):
 - **Speed**: Fast response, seconds to return
 - **Features**: No reasoning, direct search results
 - **Best For**: Simple queries, fact-checking, quick information retrieval
 
 #### Agentic Search
-Uses `web_search_agentic` tool:
+Uses `azure_web_search` tool (mode=`agentic`):
 - **Speed**: Medium, requires reasoning time
 - **Features**: AI reasoning analysis, synthesizes multiple sources
 - **Best For**: Complex queries, multi-step reasoning, deep analysis
@@ -40,7 +40,7 @@ Uses `web_search_agentic` tool:
 
 ```
 Query: "Python 3.12 release date"
-Tool: web_search_quick
+Tool: azure_web_search (mode=quick)
 Expected: Quick accurate answer
 ```
 
@@ -48,7 +48,7 @@ Expected: Quick accurate answer
 
 ```
 Query: "Impact of quantum computing on cryptography"
-Tool: web_search_agentic
+Tool: azure_web_search (mode=agentic)
 Expected: In-depth analysis from multiple angles
 ```
 
@@ -56,8 +56,8 @@ Expected: In-depth analysis from multiple angles
 
 ```
 Steps:
-1. web_search_quick - Understand topic overview
-2. web_search_agentic - Deep analysis of key points
+1. azure_web_search (mode=quick) - Understand topic overview
+2. azure_web_search (mode=agentic) - Deep analysis of key points
 Expected: Complete research report
 ```
 
@@ -65,7 +65,7 @@ Expected: Complete research report
 
 ### Phase 1: Quick Exploration
 
-Use `web_search_quick` to quickly understand the topic:
+Use `azure_web_search` (mode=`quick`) to quickly understand the topic:
 
 **Goals**:
 - Get topic overview
@@ -79,7 +79,7 @@ Use `web_search_quick` to quickly understand the topic:
 
 ### Phase 2: Deep Analysis
 
-Use `web_search_agentic` for in-depth analysis:
+Use `azure_web_search` (mode=`agentic`) for in-depth analysis:
 
 **Goals**:
 - Understand complex relationships
@@ -140,7 +140,7 @@ Based on the above research, the main conclusions are:
 
 ## Best Practices
 
-### ✅ Should Do
+### Should Do
 
 1. **Start with Quick Search**
    - Understand topic overview first
@@ -162,7 +162,7 @@ Based on the above research, the main conclusions are:
    - Tag publication time
    - Evaluate source credibility
 
-### ❌ Should Avoid
+### Should Avoid
 
 1. **Overuse Agentic Search**
    - Simple queries don't need reasoning
@@ -182,10 +182,11 @@ Based on the above research, the main conclusions are:
 
 ## Tool Usage Guide
 
-### web_search_quick
+### azure_web_search
 
 **Parameters**:
 - `query` (required): Search query string
+- `mode` (optional): `quick` or `agentic` (default: `quick`)
 - `country` (optional): Country code (US, CN, JP, etc.)
 
 **Best Use Cases**:
@@ -196,26 +197,10 @@ Based on the above research, the main conclusions are:
 
 **Examples**:
 ```
-web_search_quick("Python 3.12 new features")
-web_search_quick("2026 Spring Festival date", country="CN")
-```
-
-### web_search_agentic
-
-**Parameters**:
-- `query` (required): Search query string
-- `country` (optional): Country code
-
-**Best Use Cases**:
-- Complex problem analysis
-- Multi-step reasoning tasks
-- Synthesize multiple sources
-- Understand context
-
-**Examples**:
-```
-web_search_agentic("Applications and challenges of quantum computing in cryptography")
-web_search_agentic("Impact of AI on job market", country="US")
+azure_web_search("Python 3.12 new features", mode="quick")
+azure_web_search("2026 Spring Festival date", mode="quick", country="CN")
+azure_web_search("Applications and challenges of quantum computing in cryptography", mode="agentic")
+azure_web_search("Impact of AI on job market", mode="agentic", country="US")
 ```
 
 ## Related Resources

@@ -34,7 +34,7 @@ async def call_tool(name: str, arguments: Any) -> list[TextContent]:
 ```python
 # 新版本 (FastMCP)
 @mcp.tool()
-def web_search_quick(query: str) -> str:
+def azure_web_search(query: str, mode: str = "quick") -> str:
     """直接定义工具"""
     pass
 ```
@@ -107,8 +107,7 @@ skills/
 
 | 功能 | 旧版本 | 新版本 |
 |------|--------|--------|
-| web_search_quick | ✅ | ✅ (保持兼容) |
-| web_search_agentic | ✅ | ✅ (保持兼容) |
+| azure_web_search | ❌ | ✅ |
 | 参数验证 | 手动 | 自动（类型提示） |
 | 文档字符串 | 简单 | 详细（含示例） |
 
@@ -134,8 +133,8 @@ skills/
 ### 在 Claude Desktop 中
 
 ```bash
-# 使用工具（与旧版本相同）
-使用 web_search_quick 搜索 "Python 3.12 新特性"
+# 使用工具
+使用 azure_web_search（mode=quick）搜索 "Python 3.12 新特性"
 
 # 使用技能（新功能）
 使用 research-assistant 技能研究 "量子计算应用"
@@ -254,7 +253,7 @@ EOF
 
 4. **测试功能**
    ```
-   使用 web_search_quick 搜索 "FastMCP"
+   使用 azure_web_search（mode=quick）搜索 "FastMCP"
    使用 research-assistant 技能研究 "人工智能"
    ```
 

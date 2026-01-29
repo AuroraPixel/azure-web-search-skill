@@ -120,60 +120,60 @@ def _extract_usage(raw_response: object) -> Optional[dict]:
 # 工具定义 (Tools)
 # ============================================================================
 
-@mcp.tool()
-def web_search_quick(
+@mcp.tool(
+    name="azure_web_search",
+    description=(
+        "Search the web via Azure OpenAI Web Search.\n"
+        "Args: query (required), mode: quick|agentic (default: quick), country: ISO 3166-1 alpha-2.\n"
+        "Returns: JSON string with text, sources, statistics, and optional token usage."
+    ),
+)
+def azure_web_search(
     query: str,
-    country: Optional[str] = None
+    mode: str = "quick",
+    country: Optional[str] = None,
 ) -> str:
-    """执行快速网络搜索（无推理）。
+    """Azure OpenAI Web Search (single entrypoint).
 
-    这是最高效的搜索模式，适用于需要快速获取最新信息的场景。
-
-    适用场景：
-    - 快速查询时效性信息（如新闻、最新数据）
-    - 简单的事实查询（如定义、公式）
-    - 获取单一来源的明确答案
-    - 不需要复杂推理的查询
-
-    Args:
-        query: 搜索查询字符串（必需）
-        country: 国家代码（可选），如 US、CN、JP 等，使用 ISO 3166-1 alpha-2 标准
+    Parameters:
+        query: Search query (required).
+        mode: "quick" (fast, no reasoning) or "agentic" (slower, with analysis). Default: "quick".
+        country: Optional ISO 3166-1 alpha-2 country code (e.g. "US", "CN", "JP").
 
     Returns:
-        JSON 格式的搜索结果，包含：
-        - text: 搜索结果文本
-        - statistics: 统计信息（引用数、搜索调用数、唯一来源数）
-        - sources: 前 10 个唯一来源列表
-
-    Raises:
-        ValueError: 如果 query 参数为空
-        APIError: 如果 API 调用失败
-
-    Example:
-        >>> result = web_search_quick("Python 3.12 新特性")
-        >>> data = json.loads(result)
-        >>> print(data["text"])
+        A JSON string:
+        - meta: { tool, mode, query, country, elapsed_ms }
+        - text: result text
+        - statistics: { citations, search_calls, unique_sources }
+        - sources: top 10 unique sources
+        - usage: best-effort token usage (if available)
     """
     init_search_client()
 
     if not query:
-        raise ValueError("query 参数是必需的")
+        raise ValueError("query is required")
+
+    mode = (mode or "").strip().lower()
+    if mode not in {"quick", "agentic"}:
+        raise ValueError("mode must be 'quick' or 'agentic'")
 
     t0 = time.perf_counter()
-    logger.info(f"[CALL] tool=web_search_quick country={country or '-'} query={query!r}")
+    logger.info(f"[CALL] tool=azure_web_search mode={mode} country={country or '-'} query={query!r}")
 
     try:
-        result = search_client.quick_search(query, country=country)
+        if mode == "quick":
+            result = search_client.quick_search(query, country=country)
+        else:
+            result = search_client.agentic_search(query, country=country)
 
-        # 提取唯一来源
         sources = result.get_unique_sources()
         usage = _extract_usage(result.raw_response)
         elapsed_ms = int((time.perf_counter() - t0) * 1000)
 
-        # 格式化输出
         output = {
             "meta": {
-                "tool": "web_search_quick",
+                "tool": "azure_web_search",
+                "mode": mode,
                 "query": query,
                 "country": country,
                 "elapsed_ms": elapsed_ms,
@@ -182,105 +182,16 @@ def web_search_quick(
             "statistics": {
                 "citations": len(result.citations),
                 "search_calls": len(result.search_calls),
-                "unique_sources": len(sources)
+                "unique_sources": len(sources),
             },
             "usage": usage,
-            "sources": sources[:10]  # 只返回前 10 个来源
+            "sources": sources[:10],
         }
 
         preview = _summarize_text(result.text)
         logger.info(
-            "[OK] tool=web_search_quick elapsed_ms=%s citations=%s unique_sources=%s preview=%r",
-            elapsed_ms,
-            len(result.citations),
-            len(sources),
-            preview,
-        )
-        if usage:
-            # 常见字段：input_tokens / output_tokens / total_tokens（或 prompt_tokens / completion_tokens）
-            logger.info("[TOKENS] %s", usage)
-
-        return json.dumps(output, ensure_ascii=False, indent=2)
-
-    except Exception as e:
-        logger.error(f"[ERR] web_search_quick failed: {e}")
-        raise
-
-
-@mcp.tool()
-def web_search_agentic(
-    query: str,
-    country: Optional[str] = None
-) -> str:
-    """执行智能体搜索（带推理）。
-
-    此模式使用 AI 推理来分析和综合搜索结果，适合复杂查询。
-
-    适用场景：
-    - 需要多步推理的复杂问题
-    - 需要综合分析多个来源的信息
-    - 需要理解上下文的模糊查询
-    - 需要比较和对比不同观点
-
-    Args:
-        query: 搜索查询字符串（必需）
-        country: 国家代码（可选），如 US、CN、JP 等，使用 ISO 3166-1 alpha-2 标准
-
-    Returns:
-        JSON 格式的搜索结果，包含：
-        - text: 经过推理分析的搜索结果
-        - statistics: 统计信息
-        - sources: 来源列表
-
-    Raises:
-        ValueError: 如果 query 参数为空
-        APIError: 如果 API 调用失败
-
-    Note:
-        此模式比快速搜索慢，但提供更深入的分析和综合。
-
-    Example:
-        >>> result = web_search_agentic("比较不同编程语言的性能")
-        >>> data = json.loads(result)
-        >>> print(data["text"])  # 包含推理和对比分析
-    """
-    init_search_client()
-
-    if not query:
-        raise ValueError("query 参数是必需的")
-
-    t0 = time.perf_counter()
-    logger.info(f"[CALL] tool=web_search_agentic country={country or '-'} query={query!r}")
-
-    try:
-        result = search_client.agentic_search(query, country=country)
-
-        # 提取唯一来源
-        sources = result.get_unique_sources()
-        usage = _extract_usage(result.raw_response)
-        elapsed_ms = int((time.perf_counter() - t0) * 1000)
-
-        # 格式化输出
-        output = {
-            "meta": {
-                "tool": "web_search_agentic",
-                "query": query,
-                "country": country,
-                "elapsed_ms": elapsed_ms,
-            },
-            "text": result.text,
-            "statistics": {
-                "citations": len(result.citations),
-                "search_calls": len(result.search_calls),
-                "unique_sources": len(sources)
-            },
-            "usage": usage,
-            "sources": sources[:10]
-        }
-
-        preview = _summarize_text(result.text)
-        logger.info(
-            "[OK] tool=web_search_agentic elapsed_ms=%s citations=%s unique_sources=%s preview=%r",
+            "[OK] tool=azure_web_search mode=%s elapsed_ms=%s citations=%s unique_sources=%s preview=%r",
+            mode,
             elapsed_ms,
             len(result.citations),
             len(sources),
@@ -292,26 +203,20 @@ def web_search_agentic(
         return json.dumps(output, ensure_ascii=False, indent=2)
 
     except Exception as e:
-        logger.error(f"[ERR] web_search_agentic failed: {e}")
+        logger.error(f"[ERR] azure_web_search failed: {e}")
         raise
 
 
 # ============================================================================
-# 资源定义 (Resources)
+# Resources
 # ============================================================================
 
-@mcp.resource("config://server")
+@mcp.resource(
+    "config://server",
+    description="Server metadata and capabilities as JSON.",
+)
 def get_server_config() -> str:
-    """获取 MCP 服务器配置信息。
-
-    Returns:
-        JSON 格式的服务器配置
-
-    Example:
-        >>> config = get_server_config()
-        >>> data = json.loads(config)
-        >>> print(data["server_name"])
-    """
+    """Return MCP server metadata as JSON."""
     settings = get_settings()
 
     config = {
@@ -322,8 +227,7 @@ def get_server_config() -> str:
         "azure_model": settings.azure_openai_model,
         "capabilities": {
             "tools": [
-                "web_search_quick",
-                "web_search_agentic"
+                "azure_web_search"
             ],
             "resources": [
                 "config://server",
@@ -335,43 +239,36 @@ def get_server_config() -> str:
     return json.dumps(config, ensure_ascii=False, indent=2)
 
 
-@mcp.resource("search://modes")
+@mcp.resource(
+    "search://modes",
+    description="Supported search modes and when to use them.",
+)
 def get_search_modes() -> str:
-    """获取支持的搜索模式说明。
-
-    Returns:
-        JSON 格式的搜索模式文档
-
-    Example:
-        >>> modes = get_search_modes()
-        >>> data = json.loads(modes)
-        >>> for mode in data["modes"]:
-        ...     print(f"{mode['name']}: {mode['description']}")
-    """
+    """Return supported search modes as JSON."""
     modes = {
         "modes": [
             {
                 "name": "quick",
-                "tool": "web_search_quick",
-                "description": "快速搜索，无推理",
+                "tool": "azure_web_search",
+                "description": "Fast search (no reasoning).",
                 "use_cases": [
-                    "快速查询时效性信息",
-                    "简单的事实查询",
-                    "获取最新新闻或数据"
+                    "time-sensitive lookups (news, latest data)",
+                    "simple factual questions",
+                    "quick source gathering"
                 ],
-                "speed": "快速",
+                "speed": "fast",
                 "reasoning": False
             },
             {
                 "name": "agentic",
-                "tool": "web_search_agentic",
-                "description": "智能体搜索，带推理",
+                "tool": "azure_web_search",
+                "description": "Search with analysis (slower).",
                 "use_cases": [
-                    "复杂查询需要多步推理",
-                    "需要综合分析多个来源",
-                    "需要理解上下文的搜索"
+                    "complex questions requiring synthesis",
+                    "compare multiple sources/viewpoints",
+                    "context-dependent queries"
                 ],
-                "speed": "中等",
+                "speed": "medium",
                 "reasoning": True
             }
         ]
@@ -386,64 +283,54 @@ def get_search_modes() -> str:
 
 @mcp.prompt()
 def research_assistant(topic: str) -> str:
-    """生成研究助手提示模板。
+    """Generate a research prompt template.
 
     Args:
-        topic: 研究主题
+        topic: Research topic.
 
     Returns:
-        格式化的研究提示
-
-    Example:
-        >>> prompt = research_assistant("人工智能在医疗领域的应用")
-        >>> print(prompt)
+        A formatted prompt string.
     """
-    return f"""你是一个专业的研究助手。请使用网络搜索工具深入研究以下主题：
+    return f"""You are a professional research assistant. Research the topic below using web search.
 
-**研究主题**: {topic}
+Topic: {topic}
 
-**研究步骤**:
-1. 使用 `web_search_quick` 快速了解主题概况
-2. 使用 `web_search_agentic` 深入分析关键方面
+Steps:
+1. Use `azure_web_search` (mode=quick) to gather an overview and key facts.
+2. Use `azure_web_search` (mode=agentic) to synthesize, compare sources, and draw conclusions.
 
-**输出要求**:
-- 提供全面的研究报告
-- 包含权威来源引用
-- 分析不同观点和证据
-- 标注信息时效性
-
-请开始研究。"""
+Output requirements:
+- A concise, structured report
+- Cite reputable sources with links
+- Highlight differing viewpoints and evidence
+- Note freshness/recency of key information
+"""
 
 @mcp.prompt()
 def news_analyzer(topic: str) -> str:
-    """生成新闻分析提示模板。
+    """Generate a news analysis prompt template.
 
     Args:
-        topic: 新闻主题
+        topic: News topic.
 
     Returns:
-        格式化的新闻分析提示
-
-    Example:
-        >>> prompt = news_analyzer("2026年人工智能发展趋势")
-        >>> print(prompt)
+        A formatted prompt string.
     """
-    return f"""你是一个新闻分析专家。请搜索并分析关于"{topic}"的最新报道。
+    return f"""You are a news analyst. Find and analyze the latest coverage about: {topic}
 
-**分析步骤**:
-1. 使用 `web_search_quick` 获取最新新闻
-2. 识别主要事件和趋势
-3. 分析不同来源的报道角度
-4. 总结关键发现和影响
+Steps:
+1. Use `azure_web_search` (mode=quick) to collect the latest reports.
+2. Identify key events, timeline, and emerging trends.
+3. Compare angles and claims across sources.
+4. Summarize key takeaways and likely impact.
 
-**输出格式**:
-- 📰 标题
-- 📅 发布时间
-- 📝 核心内容
-- 🔗 来源链接
-- 💭 分析评论
-
-请开始分析。"""
+Output format:
+- Title
+- Published time (if available)
+- Key facts (separate facts vs opinions)
+- Source links
+- Your analysis (brief and evidence-based)
+"""
 
 
 # ============================================================================
@@ -451,15 +338,15 @@ def news_analyzer(topic: str) -> str:
 # ============================================================================
 
 def setup_skills_provider():
-    """设置 Skills Provider（可选）。
+    """Set up Skills Provider (optional).
 
-    如果项目包含 skills/ 目录，自动将其作为 MCP 资源暴露。
+    If `skills/` exists, expose skills as MCP resources.
     """
     global _skills_resources_registered
     skills_dir = project_root / "skills"
 
     def _register_fallback_resources() -> None:
-        """内置 fallback：用资源暴露 skills/*/SKILL.md（UTF-8 读取）。"""
+        """Fallback resources for skills (explicit UTF-8 reads)."""
         global _skills_resources_registered
 
         if _skills_resources_registered:
@@ -467,51 +354,92 @@ def setup_skills_provider():
 
         skills = [d for d in skills_dir.iterdir() if d.is_dir() and (d / "SKILL.md").exists()]
 
-        @mcp.resource("skills://list")
+        @mcp.resource(
+            "skills://list",
+            description="List available skills discovered under skills/*/SKILL.md.",
+        )
         def list_skills() -> str:
-            """列出可用技能（来自 skills/*/SKILL.md）。"""
+            """List available skills (JSON)."""
             data = {
                 "count": len(skills),
                 "skills": [d.name for d in skills],
             }
             return json.dumps(data, ensure_ascii=False, indent=2)
 
-        @mcp.resource("skill://{skill_name}")
-        def get_skill(skill_name: str) -> str:
-            """读取指定技能的 SKILL.md 内容。"""
+        @mcp.resource(
+            "skill://{skill_name}/SKILL.md",
+            description="Return SKILL.md content for the given skill (UTF-8).",
+        )
+        def get_skill_md(skill_name: str) -> str:
+            """Return a skill's SKILL.md (UTF-8)."""
             skill_path = skills_dir / skill_name / "SKILL.md"
             if not skill_path.exists():
-                raise FileNotFoundError(f"未找到技能：{skill_name}")
+                raise FileNotFoundError(f"Skill not found: {skill_name}")
             return skill_path.read_text(encoding="utf-8")
+
+        @mcp.resource(
+            "skill://{skill_name}/_manifest",
+            description="Return a minimal skill manifest for the given skill (JSON).",
+        )
+        def get_skill_manifest(skill_name: str) -> str:
+            """Return a minimal skill manifest (JSON)."""
+            skill_path = skills_dir / skill_name / "SKILL.md"
+            if not skill_path.exists():
+                raise FileNotFoundError(f"Skill not found: {skill_name}")
+            data = {
+                "name": skill_name,
+                "files": ["SKILL.md"],
+                "entry": "SKILL.md",
+            }
+            return json.dumps(data, ensure_ascii=False, indent=2)
 
         _skills_resources_registered = True
         logger.info(
-            "ℹ️  已启用内置 skills fallback：使用 `skills://list` 查看技能列表，用 `skill://<name>` 获取 SKILL.md"
+            "[INFO] Skills fallback enabled. Use `skills://list` and `skill://<name>/SKILL.md`."
         )
         if skills:
-            logger.info(f"📁 发现 {len(skills)} 个技能: " + ", ".join(d.name for d in skills))
+            logger.info(f"[INFO] Found {len(skills)} skills: " + ", ".join(d.name for d in skills))
         else:
-            logger.info("📁 未发现任何技能（缺少 skills/*/SKILL.md）")
+            logger.info("[INFO] No skills found under skills/*/SKILL.md")
 
     if skills_dir.exists():
+        # If Python is not running in UTF-8 mode (common on Windows: cp936/gbk),
+        # SkillsDirectoryProvider may read SKILL.md using the system default encoding.
+        # In that case, use the UTF-8 fallback to avoid decode errors.
+        try:
+            import locale
+
+            preferred = (locale.getpreferredencoding(False) or "").lower().replace("_", "-")
+            if getattr(sys.flags, "utf8_mode", 0) != 1 and preferred not in {"utf-8", "utf8"}:
+                logger.info(
+                    "[INFO] Default encoding=%s and UTF-8 mode is off; using the UTF-8 skills fallback. "
+                    "To force SkillsDirectoryProvider, set PYTHONUTF8=1 or start with `python -X utf8 ...`.",
+                    preferred,
+                )
+                _register_fallback_resources()
+                return
+        except Exception:
+            # If detection fails, fall back to the normal path.
+            pass
+
         try:
             # FastMCP 3.x: https://gofastmcp.com/servers/providers/skills
             from fastmcp.server.providers.skills import SkillsDirectoryProvider  # type: ignore
 
             mcp.add_provider(SkillsDirectoryProvider(roots=skills_dir))
-            logger.info(f"✅ Skills Provider 已启用（SkillsDirectoryProvider），技能目录: {skills_dir}")
+            logger.info(f"[OK] Skills Provider 已启用（SkillsDirectoryProvider），技能目录: {skills_dir}")
 
         except UnicodeDecodeError as e:
             # Windows 默认编码（gbk）下，skills 里有 emoji 等字符时可能触发
-            logger.warning(f"⚠️  Skills Provider 读取技能文件失败（编码问题）：{e}")
-            logger.warning("💡 建议使用 UTF-8 模式启动：设置 PYTHONUTF8=1 或运行 `python -X utf8 -m bin.mcp_server`")
+            logger.warning(f"[WARN] Skills Provider 读取技能文件失败（编码问题）：{e}")
+            logger.warning("[HINT] 建议使用 UTF-8 模式启动：设置 PYTHONUTF8=1 或运行 `python -X utf8 -m bin.mcp_server`")
             _register_fallback_resources()
 
         except ImportError:
             # 兼容：旧版 fastmcp 或缺少 skills provider 时，用内置资源模拟 Skills Provider
             _register_fallback_resources()
         except Exception as e:
-            logger.error(f"❌ Skills Provider 初始化失败: {e}")
+            logger.error(f"[ERR] Skills Provider 初始化失败: {e}")
 
 
 # ============================================================================

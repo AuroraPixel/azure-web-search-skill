@@ -7,8 +7,7 @@ This project is configured as an MCP Server for Cursor IDE.
 **Server Name**: azure-web-search
 
 **Available Tools**:
-1. `web_search_quick` - Fast web search (no reasoning)
-2. `web_search_agentic` - Agentic search (with reasoning)
+1. `azure_web_search` - Unified web search (`mode=quick|agentic`)
 
 ## How Cursor Uses This Server
 

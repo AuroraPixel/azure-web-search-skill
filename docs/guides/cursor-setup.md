@@ -60,17 +60,11 @@ Search for AI regulations in the United States
 
 ## 🔧 可用的工具
 
-Cursor AI 现在可以自动使用以下 2 个工具：
+Cursor AI 现在可以自动使用以下 1 个工具（统一入口）：
 
-### 1. **web_search_quick** ⚡⚡⚡
-- **速度**：最快（几秒钟）
-- **适用**：快速查询、新闻、时效性信息
-- **示例**："搜索今天的科技新闻"
-
-### 2. **web_search_agentic** ⚡⚡
-- **速度**：中等（10-30秒）
-- **适用**：复杂查询、需要分析
-- **示例**："分析量子计算的应用前景"
+### 1. **azure_web_search**
+- **模式**：`mode=quick`（快） / `mode=agentic`（带推理）
+- **适用**：快速查询、新闻、复杂分析（通过 mode 控制）
 
 ---
 
@@ -239,8 +233,9 @@ cd D:\remote\web-search
 
 ## 📊 工具参数说明
 
-### web_search_quick / web_search_agentic
+### azure_web_search
 - `query` (必需): 搜索查询字符串
+- `mode` (可选): `quick` 或 `agentic`（默认 `quick`）
 - `country` (可选): 国家代码，如 `US`, `CN`, `JP`
 
 ## 💰 费用提醒
