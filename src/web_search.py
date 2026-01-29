@@ -7,7 +7,6 @@ from openai import OpenAI
 from .config import Settings
 from .logger import get_logger
 from .models import (
-    CodeInterpreterTool,
     Message,
     MessageContent,
     SearchAction,
@@ -158,7 +157,6 @@ class AzureWebSearch:
         mode: SearchMode = SearchMode.QUICK,
         country: Optional[str] = None,
         model: Optional[str] = None,
-        include_code_interpreter: bool = False,
     ) -> WebSearchResult:
         """
         执行 Web 搜索
@@ -168,7 +166,7 @@ class AzureWebSearch:
             mode: 搜索模式
             country: 国家代码（可选）
             model: 模型名称（可选，默认使用配置中的模型）
-            include_code_interpreter: 是否包含代码解释器（仅 Deep Research 模式）
+            model: 模型名称（可选，默认使用配置中的模型）
 
         Returns:
             搜索结果
@@ -181,12 +179,8 @@ class AzureWebSearch:
         if model is None:
             model = self.settings.azure_openai_model
 
-        # Deep Research 模式需要使用 o3-deep-research 模型
-        if mode == SearchMode.DEEP_RESEARCH:
-            model = "o3-deep-research"
-
         # 构建工具配置
-        tools = self._build_tools(mode, country, include_code_interpreter)
+        tools = self._build_tools(mode, country)
 
         logger.info(f"🔍 开始搜索：{query}")
         logger.info(f"📊 模式：{mode.value}")

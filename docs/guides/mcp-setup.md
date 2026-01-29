@@ -254,27 +254,6 @@ MCP Server 提供以下工具：
 使用 web_search_agentic 分析 "量子计算在密码学中的应用"
 ```
 
-### 3. web_search_deep
-
-深度研究搜索
-
-```json
-{
-  "name": "web_search_deep",
-  "description": "执行深度研究搜索",
-  "parameters": {
-    "query": "研究主题（必需）",
-    "country": "国家代码（可选）",
-    "include_code_interpreter": "是否包含代码解释器（可选）"
-  }
-}
-```
-
-**使用示例**：
-```
-使用 web_search_deep 研究 "气候变化对农业的影响"
-```
-
 ## 🎨 Skills Provider 功能
 
 本 MCP Server 还支持 Skills Provider，可以将 AI 技能作为资源暴露。
@@ -282,7 +261,7 @@ MCP Server 提供以下工具：
 ### 可用技能
 
 1. **Research Assistant** (`skill://research-assistant`)
-   - 多阶段深度研究
+   - 多阶段研究
    - 信息综合和分析
    - 来源追踪和验证
 
@@ -438,7 +417,6 @@ LOG_LEVEL=ERROR  # 仅错误
 1. **使用合适的搜索模式**
    - 简单查询 → `web_search_quick`
    - 复杂查询 → `web_search_agentic`
-   - 深度研究 → `web_search_deep`
 
 2. **利用技能系统**
    - 复用预定义的技能模板

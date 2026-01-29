@@ -9,7 +9,6 @@ This project is configured as an MCP Server for Cursor IDE.
 **Available Tools**:
 1. `web_search_quick` - Fast web search (no reasoning)
 2. `web_search_agentic` - Agentic search (with reasoning)
-3. `web_search_deep` - Deep research (comprehensive)
 
 ## How Cursor Uses This Server
 

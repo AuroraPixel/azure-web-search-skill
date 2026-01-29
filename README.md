@@ -8,11 +8,11 @@
 
 ## 简介
 
-本项目提供了 Azure OpenAI Web Search 的完整 Python 实现，支持三种搜索模式，并可作为 MCP Server 集成到 Claude Desktop 和 Cursor 中。
+本项目提供了 Azure OpenAI Web Search 的完整 Python 实现，支持两种搜索模式，并可作为 MCP Server 集成到 Claude Desktop 和 Cursor 中。
 
 ### 核心特性
 
-- **三种搜索模式**：快速搜索、智能体搜索、深度研究
+- **两种搜索模式**：快速搜索、智能体搜索
 - **MCP Server 支持**：可集成到 Claude Desktop 和 Cursor
 - **地理位置支持**：基于 ISO 3166-1 标准的国家代码
 - **自动引用管理**：智能提取和去重 URL 引用
@@ -86,13 +86,12 @@ print(result.text)
 - [搜索模式对比](docs/guides/search-modes.md)
 - [API 参考文档](docs/guides/api-reference.md)
 
-## 🔍 三种搜索模式
+## 🔍 两种搜索模式
 
 | 模式 | 速度 | 深度 | 推理能力 | 适用场景 |
 |-----|------|------|---------|---------|
 | **Quick Search** | ⚡⚡⚡ | ⭐ | ❌ | 快速查询、时效性信息 |
 | **Agentic Search** | ⚡⚡ | ⭐⭐ | ✅ | 复杂查询、需要分析 |
-| **Deep Research** | ⚡ | ⭐⭐⭐ | ✅✅ | 深度研究、学术调查 |
 
 详细说明：[搜索模式对比](docs/guides/search-modes.md)
 
@@ -159,7 +158,7 @@ pytest
 ### 费用提醒
 - Web Search 功能会产生 Azure OpenAI API 费用
 - 每次搜索调用都会计费
-- Deep Research 模式可能产生多次调用
+- 智能体搜索通常比快速搜索更耗时、也可能更贵
 
 ### 数据隐私
 - 使用 Grounding with Bing Search 服务
@@ -168,7 +167,6 @@ pytest
 
 ### 模型要求
 - Quick/Agentic Search：需要 GPT-4 及更高版本
-- Deep Research：需要 `o3-deep-research` 模型
 
 ## 📄 许可证
 

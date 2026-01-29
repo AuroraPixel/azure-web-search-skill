@@ -13,7 +13,6 @@ def test_search_mode_enum():
     """测试搜索模式枚举"""
     assert SearchMode.QUICK.value == "quick"
     assert SearchMode.AGENTIC.value == "agentic"
-    assert SearchMode.DEEP_RESEARCH.value == "deep_research"
 
 
 def test_url_citation():

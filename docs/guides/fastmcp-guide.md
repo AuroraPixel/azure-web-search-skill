@@ -971,13 +971,13 @@ def web_search(
     """在网络上搜索信息并返回结果。
 
     这个工具使用 Azure OpenAI 的网络搜索功能来查找相关信息，
-    支持三种搜索模式：快速、代理和深度研究。
+    支持两种搜索模式：快速和智能体。
 
     Args:
         query: 搜索查询字符串
-        mode: 搜索模式 (quick/agentic/deep_research)
+        mode: 搜索模式 (quick/agentic)
         num_results: 返回结果数量 (1-50)
-        query_depth: 深度研究的查询深度 (1-5)
+        query_depth: 查询深度 (1-5)
 
     Returns:
         JSON 格式的搜索结果字符串

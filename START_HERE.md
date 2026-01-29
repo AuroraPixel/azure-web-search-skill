@@ -69,7 +69,7 @@
 
 - 每次 API 调用都会产生费用
 - Quick Search 最便宜
-- Deep Research 最贵（可能多次调用）
+- Agentic Search 通常更贵（可能多次调用）
 
 ### 🆘 遇到问题？
 

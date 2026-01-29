@@ -60,7 +60,7 @@ Search for AI regulations in the United States
 
 ## 🔧 可用的工具
 
-Cursor AI 现在可以自动使用以下 3 个工具：
+Cursor AI 现在可以自动使用以下 2 个工具：
 
 ### 1. **web_search_quick** ⚡⚡⚡
 - **速度**：最快（几秒钟）
@@ -71,11 +71,6 @@ Cursor AI 现在可以自动使用以下 3 个工具：
 - **速度**：中等（10-30秒）
 - **适用**：复杂查询、需要分析
 - **示例**："分析量子计算的应用前景"
-
-### 3. **web_search_deep** ⚡
-- **速度**：较慢（数分钟）
-- **适用**：学术研究、深度调查
-- **示例**："对区块链技术进行深度研究"
 
 ---
 
@@ -109,7 +104,7 @@ What are the latest features in React 19?
 ```
 使用快速搜索查找...
 使用智能搜索分析...
-对...进行深度研究
+对...进行深入分析
 ```
 
 ### 地区特定搜索
@@ -248,13 +243,6 @@ cd D:\remote\web-search
 - `query` (必需): 搜索查询字符串
 - `country` (可选): 国家代码，如 `US`, `CN`, `JP`
 
-### web_search_deep
-- `query` (必需): 研究主题
-- `country` (可选): 国家代码
-- `include_code_interpreter` (可选): 是否包含代码解释器
-
----
-
 ## 💰 费用提醒
 
 ⚠️ **重要提示**：
@@ -262,7 +250,6 @@ cd D:\remote\web-search
 - Web Search 功能会产生费用
 - 每次搜索调用都会计入 Azure OpenAI 账单
 - 快速搜索最经济
-- 深度研究模式可能产生多次调用
 - 建议在 Azure Portal 设置费用警报
 
 ---
@@ -293,7 +280,7 @@ Search for today's tech news
 ### 学术研究
 ```
 Deep research on machine learning interpretability
-对可解释 AI 进行深度研究
+对可解释 AI 进行深入分析
 研究神经网络的可解释性
 ```
 

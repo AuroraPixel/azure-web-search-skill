@@ -1,9 +1,8 @@
 """基于 FastMCP 的 Azure OpenAI Web Search MCP Server
 
-这个 MCP 服务器使用 FastMCP 框架构建，提供三种网络搜索模式：
+这个 MCP 服务器使用 FastMCP 框架构建，提供两种网络搜索模式：
 1. 快速搜索 (quick) - 无推理，快速返回结果
 2. 智能体搜索 (agentic) - 带推理，适合复杂查询
-3. 深度研究 (deep_research) - 深度分析，适合学术研究
 
 此外，还支持 Skills Provider，可以将 AI 技能作为 MCP 资源暴露。
 """
@@ -256,7 +255,7 @@ def get_search_modes() -> str:
                     "获取最新新闻或数据"
                 ],
                 "speed": "快速",
-                "reasoning": false
+                "reasoning": False
             },
             {
                 "name": "agentic",
@@ -268,7 +267,7 @@ def get_search_modes() -> str:
                     "需要理解上下文的搜索"
                 ],
                 "speed": "中等",
-                "reasoning": true
+                "reasoning": True
             }
         ]
     }

@@ -12,6 +12,7 @@ def test_settings_validation():
     settings = Settings(
         azure_openai_api_key="test-key",
         azure_openai_endpoint="https://test.openai.azure.com",
+        _env_file=None,
     )
     assert settings.azure_openai_api_key == "test-key"
     assert settings.azure_openai_endpoint == "https://test.openai.azure.com"
@@ -72,11 +73,18 @@ def test_log_level_validation():
         )
 
 
-def test_default_values():
+def test_default_values(monkeypatch):
     """测试默认值"""
+    # 避免外部环境变量影响默认值断言
+    monkeypatch.delenv("AZURE_OPENAI_MODEL", raising=False)
+    monkeypatch.delenv("AZURE_OPENAI_API_VERSION", raising=False)
+    monkeypatch.delenv("WEB_SEARCH_COUNTRY", raising=False)
+    monkeypatch.delenv("LOG_LEVEL", raising=False)
+
     settings = Settings(
         azure_openai_api_key="test-key",
         azure_openai_endpoint="https://test.openai.azure.com",
+        _env_file=None,
     )
     assert settings.azure_openai_model == "gpt-4o"
     assert settings.azure_openai_api_version == "2024-12-01-preview"

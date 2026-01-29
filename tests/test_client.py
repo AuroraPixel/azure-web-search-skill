@@ -3,6 +3,18 @@
 import sys
 import os
 
+import pytest
+
+
+# 这是一个偏“手动/集成”的连通性检查脚本，会依赖本机 .env、网络与真实 Azure 账号。
+# 默认跳过，避免在 CI/无环境变量时阻塞单元测试。
+if os.environ.get("RUN_INTEGRATION_TESTS") != "1":
+    pytest.skip(
+        "integration/manual test (requires real .env + network). "
+        "Set RUN_INTEGRATION_TESTS=1 to run.",
+        allow_module_level=True,
+    )
+
 # 设置 Windows 控制台编码为 UTF-8
 if os.name == 'nt':
     try:

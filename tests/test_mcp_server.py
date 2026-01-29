@@ -2,12 +2,27 @@
 
 import sys
 import os
-import io
 
-# 设置标准输出编码为 UTF-8
-if sys.platform == 'win32':
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
-    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+import pytest
+
+
+# 这是一个偏“手动/集成”的环境检查脚本，会依赖本机 .env、Claude/Cursor 配置文件等。
+# 默认跳过，避免在 CI/无环境变量时阻塞单元测试。
+if os.environ.get("RUN_INTEGRATION_TESTS") != "1":
+    pytest.skip(
+        "integration/manual test (requires local .env + desktop config). "
+        "Set RUN_INTEGRATION_TESTS=1 to run.",
+        allow_module_level=True,
+    )
+
+# 设置标准输出编码为 UTF-8（避免替换 sys.stdout 导致 pytest capture 异常）
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
+    except Exception:
+        # 某些环境不支持 reconfigure，忽略即可
+        pass
 
 # 添加 src 目录到路径
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))

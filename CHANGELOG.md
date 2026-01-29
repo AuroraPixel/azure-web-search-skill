@@ -57,7 +57,6 @@
 所有工具保持兼容，但使用 FastMCP 重新实现：
 - `web_search_quick` - 快速搜索
 - `web_search_agentic` - 智能体搜索
-- `web_search_deep` - 深度研究
 
 #### MCP 资源
 - `config://server` - 服务器配置信息
@@ -210,7 +209,7 @@ EOF
 - **MCP Server 集成**
   - 添加了 Model Context Protocol (MCP) Server 支持
   - 可以在 Claude Desktop 中作为工具直接使用
-  - 提供三个工具：`web_search_quick`、`web_search_agentic`、`web_search_deep`
+  - 提供两个工具：`web_search_quick`、`web_search_agentic`
   
 ### 📝 新增文件
 1. **`mcp_server.py`** - MCP Server 主程序
@@ -274,15 +273,6 @@ EOF
   - `query` (必需): 搜索查询字符串
   - `country` (可选): 国家代码
 - **适用**: 复杂查询、需要分析的问题
-
-#### 3. web_search_deep
-- **功能**: 深度研究搜索
-- **参数**: 
-  - `query` (必需): 研究主题
-  - `country` (可选): 国家代码
-  - `include_code_interpreter` (可选): 是否包含代码解释器
-- **适用**: 学术研究、深度调查
-- **注意**: 需要 o3-deep-research 模型
 
 ### 🔧 使用方式
 
@@ -349,11 +339,8 @@ azure-web-search/
   - 更新文件描述为"搜索模式对比示例（快速搜索 vs 智能体搜索）"
   - 保留了快速搜索和智能体搜索的对比示例
 
-### ✅ 保留的功能
-- **核心模块 (`src/web_search.py`)**
-  - `AzureWebSearch` 类中的 `deep_research()` 方法仍然保留
-  - 如果需要，仍可在代码中直接调用该方法
-  - 只是从用户界面菜单中移除了此选项
+### ✅ 当前状态
+- 深度研究相关能力已移除，仅保留快速搜索与智能体搜索两种模式
 
 ### 📝 更新的文件
 1. `main.py` - 主交互式程序
@@ -378,7 +365,6 @@ azure-web-search/
 ### 💡 使用建议
 - 大多数情况下使用**快速搜索**即可满足需求
 - 需要深入分析时使用**智能体搜索**
-- 如果确实需要深度研究，可以在代码中直接调用 `search_client.deep_research()`
 
 ### 🔧 技术细节
 - 菜单选项从 5 个减少到 4 个（包括退出选项）
