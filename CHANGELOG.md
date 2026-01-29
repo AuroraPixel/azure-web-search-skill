@@ -55,8 +55,7 @@
 
 #### MCP 工具
 所有工具保持兼容，但使用 FastMCP 重新实现：
-- `web_search_quick` - 快速搜索
-- `web_search_agentic` - 智能体搜索
+- `azure_web_search` - 统一搜索工具（mode=`quick`/`agentic`）
 
 #### MCP 资源
 - `config://server` - 服务器配置信息
@@ -94,7 +93,7 @@
 
 ```bash
 # 使用工具
-使用 web_search_quick 搜索 "Python 3.12 新特性"
+使用 azure_web_search（mode=quick）搜索 "Python 3.12 新特性"
 
 # 使用技能
 使用 research-assistant 技能研究 "量子计算应用"
@@ -209,7 +208,7 @@ EOF
 - **MCP Server 集成**
   - 添加了 Model Context Protocol (MCP) Server 支持
   - 可以在 Claude Desktop 中作为工具直接使用
-  - 提供两个工具：`web_search_quick`、`web_search_agentic`
+  - 提供一个统一工具：`azure_web_search`（mode=`quick|agentic`）
   
 ### 📝 新增文件
 1. **`mcp_server.py`** - MCP Server 主程序
@@ -260,19 +259,15 @@ EOF
 
 ### 🎯 可用的 MCP 工具
 
-#### 1. web_search_quick
-- **功能**: 快速网络搜索（无推理）
-- **参数**: 
+#### 1. azure_web_search
+- **功能**: 统一网络搜索（通过 `mode` 选择是否推理）
+- **参数**:
   - `query` (必需): 搜索查询字符串
+  - `mode` (可选): `quick` 或 `agentic`（默认 `quick`）
   - `country` (可选): 国家代码，如 US、CN、JP
-- **适用**: 时效性信息、快速查询
-
-#### 2. web_search_agentic
-- **功能**: 智能体搜索（带推理）
-- **参数**: 
-  - `query` (必需): 搜索查询字符串
-  - `country` (可选): 国家代码
-- **适用**: 复杂查询、需要分析的问题
+- **适用**:
+  - `mode=quick`: 时效性信息、快速查询
+  - `mode=agentic`: 复杂查询、需要分析的问题
 
 ### 🔧 使用方式
 
