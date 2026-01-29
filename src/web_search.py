@@ -76,8 +76,23 @@ class AzureWebSearch:
         Returns:
             解析后的搜索结果
         """
-        # 获取原始响应数据
+        # 获取原始响应数据（包含 usage 时，可用于统计 token）
         raw_data = response.model_dump() if hasattr(response, "model_dump") else {}
+        if not isinstance(raw_data, dict):
+            raw_data = {}
+
+        # 某些 Azure/代理实现会把 usage 放在属性上但不出现在 model_dump 中
+        # 尽量把它注入 raw_data，便于上层统一提取与记录
+        if not raw_data.get("usage"):
+            usage_obj = getattr(response, "usage", None)
+            if usage_obj is not None:
+                if hasattr(usage_obj, "model_dump"):
+                    try:
+                        raw_data["usage"] = usage_obj.model_dump()
+                    except Exception:
+                        pass
+                elif isinstance(usage_obj, dict):
+                    raw_data["usage"] = usage_obj
 
         output_items = getattr(response, "output", [])
 

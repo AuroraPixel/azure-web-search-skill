@@ -11,6 +11,7 @@ import sys
 import os
 import json
 import argparse
+import time
 from pathlib import Path
 from typing import Optional
 
@@ -27,9 +28,9 @@ except ImportError:
 
 from src.config import get_settings
 from src.web_search import AzureWebSearch
-from src.logger import get_logger
+from src.logger import get_logger, setup_logger
 
-logger = get_logger(__name__)
+logger = get_logger()
 
 # 创建 FastMCP 服务器实例
 mcp = FastMCP("Azure Web Search")
@@ -46,10 +47,73 @@ def init_search_client():
         try:
             settings = get_settings()
             search_client = AzureWebSearch(settings)
-            logger.info("✅ Web Search 客户端初始化成功")
+            logger.info("[INIT] Web Search client initialized")
         except Exception as e:
-            logger.error(f"❌ 初始化失败：{e}")
+            logger.error(f"[INIT] Failed to initialize Web Search client: {e}")
             raise
+
+
+def _summarize_text(text: str, max_chars: int = 200) -> str:
+    """返回单行摘要，避免日志刷屏。"""
+    if not text:
+        return ""
+    one_line = " ".join(text.split())
+    if len(one_line) <= max_chars:
+        return one_line
+    return one_line[: max_chars - 1] + "…"
+
+
+def _extract_usage(raw_response: object) -> Optional[dict]:
+    """尽量从 OpenAI Responses 返回里提取 token 用量。"""
+    if not isinstance(raw_response, dict):
+        return None
+
+    def _normalize(u: dict) -> dict:
+        # 兼容多种字段命名（不同 SDK/代理层）
+        input_tokens = (
+            u.get("input_tokens")
+            or u.get("prompt_tokens")
+            or u.get("inputTokens")
+            or u.get("promptTokens")
+        )
+        output_tokens = (
+            u.get("output_tokens")
+            or u.get("completion_tokens")
+            or u.get("outputTokens")
+            or u.get("completionTokens")
+        )
+        total_tokens = (
+            u.get("total_tokens")
+            or u.get("totalTokens")
+            or (input_tokens + output_tokens if isinstance(input_tokens, int) and isinstance(output_tokens, int) else None)
+        )
+
+        normalized = dict(u)
+        if input_tokens is not None:
+            normalized["input_tokens"] = input_tokens
+        if output_tokens is not None:
+            normalized["output_tokens"] = output_tokens
+        if total_tokens is not None:
+            normalized["total_tokens"] = total_tokens
+        return normalized
+
+    usage = raw_response.get("usage")
+    if isinstance(usage, dict) and usage:
+        return _normalize(usage)
+
+    # 兼容某些 SDK/代理层包装
+    resp = raw_response.get("response")
+    if isinstance(resp, dict):
+        usage = resp.get("usage")
+        if isinstance(usage, dict) and usage:
+            return _normalize(usage)
+
+    # 再尝试一些常见包装字段
+    usage = raw_response.get("token_usage") or raw_response.get("tokenUsage") or raw_response.get("usage_stats")
+    if isinstance(usage, dict) and usage:
+        return _normalize(usage)
+
+    return None
 
 
 # ============================================================================
@@ -95,31 +159,51 @@ def web_search_quick(
     if not query:
         raise ValueError("query 参数是必需的")
 
-    logger.info(f"🔍 执行快速搜索：{query}")
+    t0 = time.perf_counter()
+    logger.info(f"[CALL] tool=web_search_quick country={country or '-'} query={query!r}")
 
     try:
         result = search_client.quick_search(query, country=country)
 
         # 提取唯一来源
         sources = result.get_unique_sources()
+        usage = _extract_usage(result.raw_response)
+        elapsed_ms = int((time.perf_counter() - t0) * 1000)
 
         # 格式化输出
         output = {
+            "meta": {
+                "tool": "web_search_quick",
+                "query": query,
+                "country": country,
+                "elapsed_ms": elapsed_ms,
+            },
             "text": result.text,
             "statistics": {
                 "citations": len(result.citations),
                 "search_calls": len(result.search_calls),
                 "unique_sources": len(sources)
             },
+            "usage": usage,
             "sources": sources[:10]  # 只返回前 10 个来源
         }
 
-        logger.info(f"✅ 快速搜索完成，找到 {len(result.citations)} 个引用")
+        preview = _summarize_text(result.text)
+        logger.info(
+            "[OK] tool=web_search_quick elapsed_ms=%s citations=%s unique_sources=%s preview=%r",
+            elapsed_ms,
+            len(result.citations),
+            len(sources),
+            preview,
+        )
+        if usage:
+            # 常见字段：input_tokens / output_tokens / total_tokens（或 prompt_tokens / completion_tokens）
+            logger.info("[TOKENS] %s", usage)
 
         return json.dumps(output, ensure_ascii=False, indent=2)
 
     except Exception as e:
-        logger.error(f"❌ 快速搜索失败：{e}")
+        logger.error(f"[ERR] web_search_quick failed: {e}")
         raise
 
 
@@ -165,31 +249,50 @@ def web_search_agentic(
     if not query:
         raise ValueError("query 参数是必需的")
 
-    logger.info(f"🧠 执行智能体搜索：{query}")
+    t0 = time.perf_counter()
+    logger.info(f"[CALL] tool=web_search_agentic country={country or '-'} query={query!r}")
 
     try:
         result = search_client.agentic_search(query, country=country)
 
         # 提取唯一来源
         sources = result.get_unique_sources()
+        usage = _extract_usage(result.raw_response)
+        elapsed_ms = int((time.perf_counter() - t0) * 1000)
 
         # 格式化输出
         output = {
+            "meta": {
+                "tool": "web_search_agentic",
+                "query": query,
+                "country": country,
+                "elapsed_ms": elapsed_ms,
+            },
             "text": result.text,
             "statistics": {
                 "citations": len(result.citations),
                 "search_calls": len(result.search_calls),
                 "unique_sources": len(sources)
             },
+            "usage": usage,
             "sources": sources[:10]
         }
 
-        logger.info(f"✅ 智能体搜索完成，找到 {len(result.citations)} 个引用")
+        preview = _summarize_text(result.text)
+        logger.info(
+            "[OK] tool=web_search_agentic elapsed_ms=%s citations=%s unique_sources=%s preview=%r",
+            elapsed_ms,
+            len(result.citations),
+            len(sources),
+            preview,
+        )
+        if usage:
+            logger.info("[TOKENS] %s", usage)
 
         return json.dumps(output, ensure_ascii=False, indent=2)
 
     except Exception as e:
-        logger.error(f"❌ 智能体搜索失败：{e}")
+        logger.error(f"[ERR] web_search_agentic failed: {e}")
         raise
 
 
@@ -418,6 +521,10 @@ def setup_skills_provider():
 def main():
     """启动 MCP 服务器（stdio / streamable-http / sse）"""
     settings = get_settings()
+    # 确保业务日志有 handler（否则只有 uvicorn/fastmcp 的日志）
+    global logger
+    setup_logger(level=settings.log_level)
+    logger = get_logger()
 
     parser = argparse.ArgumentParser(description="Azure Web Search MCP Server (FastMCP)")
     parser.add_argument(
