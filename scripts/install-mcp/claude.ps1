@@ -91,7 +91,7 @@ $mcpServerConfig = @{
             $ProjectPath,
             "run",
             "python",
-            "mcp_server.py"
+            "bin/mcp_server.py"
         )
         env = @{
             PYTHONPATH = $ProjectPath

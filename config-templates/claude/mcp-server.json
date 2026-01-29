@@ -7,7 +7,7 @@
         "D:\\remote\\web-search",
         "run",
         "python",
-        "mcp_server.py"
+        "bin/mcp_server.py"
       ],
       "env": {
         "PYTHONPATH": "D:\\remote\\web-search"
