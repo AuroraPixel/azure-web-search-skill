@@ -1,5 +1,145 @@
 # 更新日志
 
+## [2026-01-29] - v2.0.0 - FastMCP 迁移和 Skills Provider
+
+### 🎁 重大更新
+
+#### 迁移到 FastMCP 框架
+- **完全重写 MCP Server**：从旧的 `mcp` 包迁移到 `FastMCP` 框架
+- **更简洁的 API**：使用装饰器模式，代码更清晰易读
+- **更好的开发体验**：改进的类型提示和错误处理
+- **性能提升**：优化的异步处理和缓存机制
+
+#### 新增 Skills Provider 支持
+- **技能系统**：支持将 AI 技能作为 MCP 资源暴露
+- **三个内置技能**：
+  - Research Assistant - 研究助手
+  - News Analyzer - 新闻分析
+  - Code Reviewer - 代码审查
+- **技能目录**：`skills/` 目录用于存放技能定义
+- **可扩展**：轻松添加自定义技能
+
+### 🔄 代码变更
+
+#### MCP Server 重构 (`bin/mcp_server.py`)
+- 使用 `@mcp.tool()` 装饰器定义工具
+- 使用 `@mcp.resource()` 装饰器定义资源
+- 使用 `@mcp.prompt()` 装饰器定义提示
+- 新增 `setup_skills_provider()` 函数
+- 改进的错误处理和日志记录
+
+#### 依赖更新 (`pyproject.toml`)
+- 移除：`mcp>=1.1.2`
+- 新增：`fastmcp>=0.1.0`
+
+### 📁 新增文件
+
+#### 技能定义
+- `skills/research-assistant/SKILL.md` - 研究助手技能
+- `skills/news-analyzer/SKILL.md` - 新闻分析技能
+- `skills/code-reviewer/SKILL.md` - 代码审查技能
+- `skills/README.md` - 技能系统说明
+
+#### 文档
+- `docs/guides/fastmcp-guide.md` - FastMCP 完整指南（80KB）
+
+### 📝 更新文档
+
+- `docs/guides/mcp-setup.md` - 更新为 FastMCP 版本
+  - 新增 v2.0.0 特性说明
+  - 更新安装步骤
+  - 添加 Skills Provider 使用指南
+  - 新增从旧版本升级说明
+
+### ✨ 新功能
+
+#### MCP 工具
+所有工具保持兼容，但使用 FastMCP 重新实现：
+- `web_search_quick` - 快速搜索
+- `web_search_agentic` - 智能体搜索
+- `web_search_deep` - 深度研究
+
+#### MCP 资源
+- `config://server` - 服务器配置信息
+- `search://modes` - 搜索模式说明
+- `skill://research-assistant` - 研究助手技能
+- `skill://news-analyzer` - 新闻分析技能
+- `skill://code-reviewer` - 代码审查技能
+
+#### MCP 提示
+- `research_assistant` - 研究助手提示模板
+- `news_analyzer` - 新闻分析提示模板
+
+### 🔧 改进
+
+- **类型安全**：完整的类型注解
+- **文档字符串**：详细的函数文档
+- **错误处理**：更友好的错误信息
+- **日志记录**：改进的日志输出
+- **代码组织**：更清晰的模块划分
+
+### 📊 兼容性
+
+#### 保持兼容
+- 配置文件格式无需更改
+- 工具名称和参数保持不变
+- 现有集成无需修改
+
+#### 需要更新
+- 依赖包需要重新安装：`uv pip install -e .`
+- 首次运行需要安装 FastMCP
+
+### 🚀 使用示例
+
+#### 在 Claude Desktop 中
+
+```bash
+# 使用工具
+使用 web_search_quick 搜索 "Python 3.12 新特性"
+
+# 使用技能
+使用 research-assistant 技能研究 "量子计算应用"
+使用 news-analyzer 技能分析 "今日科技新闻"
+使用 code-reviewer 技能查找 "最佳实践"
+```
+
+#### 创建自定义技能
+
+```bash
+# 1. 创建技能目录
+mkdir skills/my-skill
+
+# 2. 创建 SKILL.md
+cat > skills/my-skill/SKILL.md << EOF
+# My Custom Skill
+
+## 概述
+技能描述
+
+## 能力
+- 能力 1
+- 能力 2
+...
+EOF
+
+# 3. 重启 MCP Server
+# 技能会自动被发现并可用
+```
+
+### 🐛 修复问题
+
+- 修复了路径计算问题（使用 `Path` 对象）
+- 修复了技能目录扫描逻辑
+- 改进了错误消息的清晰度
+
+### 📚 相关资源
+
+- [FastMCP 官方文档](https://gofastmcp.com)
+- [FastMCP 完整指南](docs/guides/fastmcp-guide.md)
+- [MCP 设置指南](docs/guides/mcp-setup.md)
+
+---
+
 ## [2026-01-29] - 项目结构重组
 
 ### 🎁 重大改进

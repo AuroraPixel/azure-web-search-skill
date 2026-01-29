@@ -43,7 +43,6 @@ class AzureWebSearch:
         self,
         mode: SearchMode,
         country: Optional[str] = None,
-        include_code_interpreter: bool = False,
     ) -> List[Dict[str, Any]]:
         """
         构建工具配置
@@ -51,7 +50,6 @@ class AzureWebSearch:
         Args:
             mode: 搜索模式
             country: 国家代码
-            include_code_interpreter: 是否包含代码解释器工具
 
         Returns:
             工具配置列表
@@ -66,11 +64,6 @@ class AzureWebSearch:
             web_search_tool.user_location = UserLocation(type="approximate", country=country)
 
         tools.append(web_search_tool.to_dict())
-
-        # Deep Research 模式下可以添加代码解释器
-        if mode == SearchMode.DEEP_RESEARCH and include_code_interpreter:
-            code_tool = CodeInterpreterTool()
-            tools.append(code_tool.to_dict())
 
         return tools
 
@@ -246,27 +239,3 @@ class AzureWebSearch:
             搜索结果
         """
         return self.search(query, mode=SearchMode.AGENTIC, country=country)
-
-    def deep_research(
-        self,
-        query: str,
-        country: Optional[str] = None,
-        include_code_interpreter: bool = False,
-    ) -> WebSearchResult:
-        """
-        深度研究
-
-        Args:
-            query: 研究主题
-            country: 国家代码（可选）
-            include_code_interpreter: 是否包含代码解释器工具
-
-        Returns:
-            研究结果
-        """
-        return self.search(
-            query,
-            mode=SearchMode.DEEP_RESEARCH,
-            country=country,
-            include_code_interpreter=include_code_interpreter,
-        )

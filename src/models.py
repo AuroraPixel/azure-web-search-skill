@@ -11,7 +11,6 @@ class SearchMode(str, Enum):
 
     QUICK = "quick"  # 快速搜索（无推理）
     AGENTIC = "agentic"  # 智能体搜索（带推理）
-    DEEP_RESEARCH = "deep_research"  # 深度研究
 
 
 class SearchActionType(str, Enum):
