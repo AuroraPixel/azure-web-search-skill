@@ -51,7 +51,15 @@ python examples/basic_search.py
 
 在 Claude Desktop 或 Cursor 中直接使用 Web Search 功能：
 
-📖 **详细配置**：[MCP 配置指南](docs/guides/mcp-setup.md) | [Cursor 配置指南](docs/guides/cursor-setup.md)
+🚀 **快速启动**：[QUICK_START.md](QUICK_START.md) - 30 秒启动指南
+
+📖 **详细配置**：[MCP 配置指南](docs/guides/mcp-setup.md) | [运行指南](RUN_GUIDE.md)
+
+**启动 HTTP 服务器**（推荐）：
+```bash
+python -m bin.mcp_server
+# 访问：http://127.0.0.1:8000/mcp
+```
 
 配置完成后，在 Claude 中直接对话：
 ```

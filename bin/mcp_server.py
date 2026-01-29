@@ -10,6 +10,7 @@
 import sys
 import os
 import json
+import argparse
 from pathlib import Path
 from typing import Optional
 
@@ -35,6 +36,7 @@ mcp = FastMCP("Azure Web Search")
 
 # 全局搜索客户端
 search_client: Optional[AzureWebSearch] = None
+_skills_resources_registered: bool = False
 
 
 def init_search_client():
@@ -350,26 +352,61 @@ def setup_skills_provider():
 
     如果项目包含 skills/ 目录，自动将其作为 MCP 资源暴露。
     """
+    global _skills_resources_registered
     skills_dir = project_root / "skills"
+
+    def _register_fallback_resources() -> None:
+        """内置 fallback：用资源暴露 skills/*/SKILL.md（UTF-8 读取）。"""
+        global _skills_resources_registered
+
+        if _skills_resources_registered:
+            return
+
+        skills = [d for d in skills_dir.iterdir() if d.is_dir() and (d / "SKILL.md").exists()]
+
+        @mcp.resource("skills://list")
+        def list_skills() -> str:
+            """列出可用技能（来自 skills/*/SKILL.md）。"""
+            data = {
+                "count": len(skills),
+                "skills": [d.name for d in skills],
+            }
+            return json.dumps(data, ensure_ascii=False, indent=2)
+
+        @mcp.resource("skill://{skill_name}")
+        def get_skill(skill_name: str) -> str:
+            """读取指定技能的 SKILL.md 内容。"""
+            skill_path = skills_dir / skill_name / "SKILL.md"
+            if not skill_path.exists():
+                raise FileNotFoundError(f"未找到技能：{skill_name}")
+            return skill_path.read_text(encoding="utf-8")
+
+        _skills_resources_registered = True
+        logger.info(
+            "ℹ️  已启用内置 skills fallback：使用 `skills://list` 查看技能列表，用 `skill://<name>` 获取 SKILL.md"
+        )
+        if skills:
+            logger.info(f"📁 发现 {len(skills)} 个技能: " + ", ".join(d.name for d in skills))
+        else:
+            logger.info("📁 未发现任何技能（缺少 skills/*/SKILL.md）")
 
     if skills_dir.exists():
         try:
-            from fastmcp.providers.skills import SkillsDirectoryProvider
+            # FastMCP 3.x: https://gofastmcp.com/servers/providers/skills
+            from fastmcp.server.providers.skills import SkillsDirectoryProvider  # type: ignore
 
-            # 添加技能目录提供者
-            mcp.add_provider(SkillsDirectoryProvider(skills_dir))
+            mcp.add_provider(SkillsDirectoryProvider(roots=skills_dir))
+            logger.info(f"✅ Skills Provider 已启用（SkillsDirectoryProvider），技能目录: {skills_dir}")
 
-            logger.info(f"✅ Skills Provider 已启用，技能目录: {skills_dir}")
-
-            # 列出发现的技能
-            skills = [d for d in skills_dir.iterdir() if d.is_dir() and (d / "SKILL.md").exists()]
-            if skills:
-                logger.info(f"📁 发现 {len(skills)} 个技能:")
-                for skill in skills:
-                    logger.info(f"   - {skill.name}")
+        except UnicodeDecodeError as e:
+            # Windows 默认编码（gbk）下，skills 里有 emoji 等字符时可能触发
+            logger.warning(f"⚠️  Skills Provider 读取技能文件失败（编码问题）：{e}")
+            logger.warning("💡 建议使用 UTF-8 模式启动：设置 PYTHONUTF8=1 或运行 `python -X utf8 -m bin.mcp_server`")
+            _register_fallback_resources()
 
         except ImportError:
-            logger.warning("⚠️  FastMCP Skills Provider 不可用，请升级到最新版本")
+            # 兼容：旧版 fastmcp 或缺少 skills provider 时，用内置资源模拟 Skills Provider
+            _register_fallback_resources()
         except Exception as e:
             logger.error(f"❌ Skills Provider 初始化失败: {e}")
 
@@ -379,8 +416,21 @@ def setup_skills_provider():
 # ============================================================================
 
 def main():
-    """启动 MCP 服务器"""
-    logger.info("🚀 启动 Azure Web Search MCP Server (基于 FastMCP)")
+    """启动 MCP 服务器（stdio / streamable-http / sse）"""
+    settings = get_settings()
+
+    parser = argparse.ArgumentParser(description="Azure Web Search MCP Server (FastMCP)")
+    parser.add_argument(
+        "--transport",
+        default=settings.mcp_transport,
+        choices=["stdio", "streamable-http", "sse"],
+        help="传输协议：stdio / streamable-http / sse（默认来自 MCP_TRANSPORT）",
+    )
+    parser.add_argument("--host", default=settings.mcp_host, help="HTTP 绑定地址（仅 HTTP/SSE）")
+    parser.add_argument("--port", type=int, default=settings.mcp_port, help="HTTP 端口（仅 HTTP/SSE）")
+    parser.add_argument("--path", default="/mcp", help="HTTP 路径（仅 HTTP/SSE，默认：/mcp）")
+    parser.add_argument("--no-banner", action="store_true", help="不显示 FastMCP 启动横幅")
+    args = parser.parse_args()
 
     # 预先初始化客户端
     try:
@@ -393,9 +443,29 @@ def main():
     # 设置 Skills Provider
     setup_skills_provider()
 
-    # 运行服务器
-    logger.info("🎯 MCP 服务器已启动，等待连接...")
-    mcp.run()
+    show_banner = not args.no_banner
+    path = args.path if args.path.startswith("/") else f"/{args.path}"
+
+    try:
+        if args.transport == "stdio":
+            logger.info("🚀 启动 Azure Web Search MCP Server (STDIO)")
+            logger.info("🎯 MCP STDIO 服务器正在启动...")
+            mcp.run(transport="stdio", show_banner=show_banner)
+        else:
+            logger.info(f"🚀 启动 Azure Web Search MCP Server ({args.transport})")
+            logger.info(f"📡 服务器地址: http://{args.host}:{args.port}{path}")
+            logger.info("🎯 MCP HTTP 服务器正在启动...")
+            mcp.run(
+                transport=args.transport,
+                show_banner=show_banner,
+                host=args.host,
+                port=args.port,
+                path=path,
+            )
+    except OSError as e:
+        logger.error(f"❌ 启动失败：{e}")
+        logger.error("💡 端口可能被占用，可尝试：--port 8001")
+        raise
 
 
 if __name__ == "__main__":

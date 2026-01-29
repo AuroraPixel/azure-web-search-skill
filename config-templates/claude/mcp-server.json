@@ -10,7 +10,9 @@
         "bin/mcp_server.py"
       ],
       "env": {
-        "PYTHONPATH": "D:\\remote\\web-search"
+        "PYTHONPATH": "D:\\remote\\web-search",
+        "PYTHONUTF8": "1",
+        "PYTHONIOENCODING": "utf-8"
       }
     }
   }

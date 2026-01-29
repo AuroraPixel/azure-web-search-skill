@@ -27,6 +27,14 @@ class Settings(BaseSettings):
     # 日志配置
     log_level: str = Field(default="INFO", description="日志级别")
 
+    # HTTP 服务器配置
+    mcp_host: str = Field(default="127.0.0.1", description="MCP 服务器监听地址")
+    mcp_port: int = Field(default=8000, description="MCP 服务器端口")
+    mcp_transport: str = Field(
+        default="streamable-http",
+        description="MCP 传输协议 (stdio/streamable-http/sse；http 作为 streamable-http 的别名)",
+    )
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
@@ -63,6 +71,26 @@ class Settings(BaseSettings):
         v = v.upper()
         if v not in valid_levels:
             raise ValueError(f"日志级别必须是以下之一：{', '.join(valid_levels)}")
+        return v
+
+    @field_validator("mcp_transport")
+    @classmethod
+    def validate_transport(cls, v: str) -> str:
+        """验证传输协议"""
+        v = v.lower().strip()
+        # 兼容旧值：http => streamable-http
+        if v == "http":
+            return "streamable-http"
+        if v not in ["stdio", "streamable-http", "sse"]:
+            raise ValueError("传输协议必须是 'stdio' / 'streamable-http' / 'sse'（或旧值 'http'）")
+        return v
+
+    @field_validator("mcp_port")
+    @classmethod
+    def validate_port(cls, v: int) -> int:
+        """验证端口号"""
+        if not (1 <= v <= 65535):
+            raise ValueError("端口号必须在 1-65535 之间")
         return v
 
 

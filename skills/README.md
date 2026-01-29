@@ -214,8 +214,8 @@ def setup_skills_provider():
     skills_dir = project_root / "skills"
 
     if skills_dir.exists():
-        from fastmcp.providers.skills import SkillsDirectoryProvider
-        mcp.add_provider(SkillsDirectoryProvider(skills_dir))
+        from fastmcp.server.providers.skills import SkillsDirectoryProvider
+        mcp.add_provider(SkillsDirectoryProvider(roots=skills_dir))
 ```
 
 ### Skills Directory Configuration

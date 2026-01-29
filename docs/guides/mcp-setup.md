@@ -18,6 +18,7 @@
 - ✅ 内置 Skills Provider 支持
 - ✅ 更强大的错误处理
 - ✅ 更好的类型提示
+- ✅ **支持 HTTP 流式传输协议（推荐）**
 
 ## 🚀 快速设置
 
@@ -41,25 +42,61 @@ cd /path/to/web-search
 uv pip install -e .
 ```
 
-### 步骤 2：配置环境变量
+### 步骤 2.5：选择传输协议
 
-确保 `.env` 文件已正确配置：
+本 MCP Server 支持两种传输协议：
 
+#### HTTP 流式传输（推荐）
+
+**适用场景**：
+- 需要远程访问 MCP 服务器
+- 多个客户端需要同时连接
+- 部署到服务器或云环境
+- 需要更好的性能和稳定性
+
+**配置方式**：
+
+在 `.env` 文件中设置：
 ```env
-# Azure OpenAI Configuration
-AZURE_OPENAI_API_KEY=你的API密钥
-AZURE_OPENAI_ENDPOINT=https://你的资源名.openai.azure.com
-AZURE_OPENAI_MODEL=gpt-4o
-AZURE_OPENAI_API_VERSION=2024-12-01-preview
-
-# Web Search 配置
-WEB_SEARCH_COUNTRY=CN
-
-# 日志级别
-LOG_LEVEL=INFO
+MCP_TRANSPORT=http
+MCP_HOST=127.0.0.1  # 或 0.0.0.0 以允许远程访问
+MCP_PORT=8000       # 可以更改为其他端口
 ```
 
-### 步骤 3：配置 Claude Desktop
+**启动 HTTP 服务器**：
+
+```bash
+# 方式 1：直接运行服务器
+python -m bin.mcp_server
+
+# 方式 2：使用 uv run
+uv run python -m bin.mcp_server
+
+# 方式 3：使用 FastMCP CLI（推荐用于开发）
+fastmcp run bin/mcp_server.py --transport http --port 8000
+```
+
+**访问地址**：
+- 本地：`http://127.0.0.1:8000/mcp`
+- 远程：`http://YOUR_SERVER_IP:8000/mcp`（需要设置 `MCP_HOST=0.0.0.0`）
+
+#### STDIO 传输（传统）
+
+**适用场景**：
+- 与 Claude Desktop 集成
+- 本地开发测试
+- 单用户使用
+
+**配置方式**：
+
+在 `.env` 文件中设置：
+```env
+MCP_TRANSPORT=stdio
+```
+
+然后按照下面的步骤配置 Claude Desktop 或 Cursor。
+
+### 步骤 3：配置 Claude Desktop（STDIO 模式）
 
 #### Windows 用户
 
@@ -70,6 +107,7 @@ LOG_LEVEL=INFO
 
 2. 编辑配置文件，添加以下内容：
 
+   **STDIO 模式配置**（传统方式）：
    ```json
    {
      "mcpServers": {
@@ -83,12 +121,26 @@ LOG_LEVEL=INFO
            "bin/mcp_server.py"
          ],
          "env": {
-           "PYTHONPATH": "D:\\remote\\web-search"
+           "PYTHONPATH": "D:\\remote\\web-search",
+           "MCP_TRANSPORT": "stdio"
          }
        }
      }
    }
    ```
+
+   **HTTP 模式配置**（推荐）：
+   ```json
+   {
+     "mcpServers": {
+       "azure-web-search": {
+         "url": "http://127.0.0.1:8000/mcp"
+       }
+     }
+   }
+   ```
+
+   **注意**：使用 HTTP 模式时，需要先单独启动 MCP 服务器（见步骤 2.5）。
 
 3. 保存文件
 
@@ -101,6 +153,7 @@ LOG_LEVEL=INFO
 
 2. 编辑配置：
 
+   **STDIO 模式配置**（传统方式）：
    ```json
    {
      "mcpServers": {
@@ -114,8 +167,20 @@ LOG_LEVEL=INFO
            "bin/mcp_server.py"
          ],
          "env": {
-           "PYTHONPATH": "/path/to/web-search"
+           "PYTHONPATH": "/path/to/web-search",
+           "MCP_TRANSPORT": "stdio"
          }
+       }
+     }
+   }
+   ```
+
+   **HTTP 模式配置**（推荐）：
+   ```json
+   {
+     "mcpServers": {
+       "azure-web-search": {
+         "url": "http://127.0.0.1:8000/mcp"
        }
      }
    }
@@ -128,7 +193,7 @@ LOG_LEVEL=INFO
    ~/.config/Claude/claude_desktop_config.json
    ```
 
-2. 使用与 macOS 相同的配置格式
+2. 使用与 macOS 相同的配置格式（STDIO 或 HTTP 模式）
 
 ### 步骤 4：配置 Cursor（可选）
 
@@ -141,6 +206,7 @@ LOG_LEVEL=INFO
 
 2. 添加配置：
 
+   **STDIO 模式配置**（传统方式）：
    ```json
    {
      "mcpServers": {
@@ -154,8 +220,20 @@ LOG_LEVEL=INFO
            "bin/mcp_server.py"
          ],
          "env": {
-           "PYTHONPATH": "D:\\remote\\web-search"
+           "PYTHONPATH": "D:\\remote\\web-search",
+           "MCP_TRANSPORT": "stdio"
          }
+       }
+     }
+   }
+   ```
+
+   **HTTP 模式配置**（推荐）：
+   ```json
+   {
+     "mcpServers": {
+       "azure-web-search": {
+         "url": "http://127.0.0.1:8000/mcp"
        }
      }
    }
@@ -169,9 +247,29 @@ LOG_LEVEL=INFO
    ~/.config/Cursor/User/globalStorage/mcp.json                    (Linux)
    ```
 
-2. 使用与 Claude Desktop 相同的配置格式
+2. 使用与 Claude Desktop 相同的配置格式（STDIO 或 HTTP 模式）
 
-### 步骤 5：重启应用
+### 步骤 5：启动服务器和重启应用
+
+#### HTTP 模式
+
+1. **先启动 MCP HTTP 服务器**：
+   ```bash
+   # 在新的终端窗口中
+   cd D:\remote\web-search
+   python -m bin.mcp_server
+   ```
+
+   服务器会显示：
+   ```
+   🚀 启动 Azure Web Search MCP Server (HTTP 流式传输模式)
+   📡 服务器地址: http://127.0.0.1:8000/mcp
+   🎯 MCP HTTP 服务器正在启动...
+   ```
+
+2. **重启 Claude Desktop 或 Cursor**
+
+#### STDIO 模式
 
 1. **完全关闭** Claude Desktop 或 Cursor
 2. **重新启动**应用
@@ -311,8 +409,8 @@ def setup_skills_provider():
     skills_dir = Path("/path/to/custom/skills")
 
     if skills_dir.exists():
-        from fastmcp.providers.skills import SkillsDirectoryProvider
-        mcp.add_provider(SkillsDirectoryProvider(skills_dir))
+        from fastmcp.server.providers.skills import SkillsDirectoryProvider
+        mcp.add_provider(SkillsDirectoryProvider(roots=skills_dir))
 ```
 
 ### 调整日志级别

@@ -461,7 +461,7 @@ This skill helps process and analyze PDF documents using specialized tools.
 
 ```python
 from fastmcp import FastMCP
-from fastmcp.providers.skills import SkillProvider
+from fastmcp.server.providers.skills import SkillProvider
 from pathlib import Path
 
 mcp = FastMCP("Single Skill Server")
@@ -483,14 +483,14 @@ skill://pdf-processing
 
 ```python
 from fastmcp import FastMCP
-from fastmcp.providers.skills import SkillsDirectoryProvider
+from fastmcp.server.providers.skills import SkillsDirectoryProvider
 from pathlib import Path
 
 mcp = FastMCP("Multi Skill Server")
 
 # 添加整个技能目录
 skills_dir = Path("~/.claude/skills").expanduser()
-mcp.add_provider(SkillsDirectoryProvider(skills_dir))
+mcp.add_provider(SkillsDirectoryProvider(roots=skills_dir))
 
 # 运行服务器
 mcp.run()
@@ -508,7 +508,7 @@ skill://documentation
 #### Claude Desktop Skills
 
 ```python
-from fastmcp.providers.skills import ClaudeSkillsProvider
+from fastmcp.server.providers.skills import ClaudeSkillsProvider
 
 mcp = FastMCP("Claude Skills Integration")
 
@@ -524,7 +524,7 @@ mcp.add_provider(ClaudeSkillsProvider())
 #### Cursor Skills
 
 ```python
-from fastmcp.providers.skills import CursorSkillsProvider
+from fastmcp.server.providers.skills import CursorSkillsProvider
 
 mcp = FastMCP("Cursor Skills Integration")
 
@@ -540,7 +540,7 @@ mcp.add_provider(CursorSkillsProvider())
 #### VSCode Skills
 
 ```python
-from fastmcp.providers.skills import VSCodeSkillsProvider
+from fastmcp.server.providers.skills import VSCodeSkillsProvider
 
 mcp = FastMCP("VSCode Skills Integration")
 
@@ -577,14 +577,14 @@ manifest = mcp.get_resource("skill://pdf-processing/_manifest")
 
 ```python
 from fastmcp import FastMCP
-from fastmcp.providers.skills import SkillsDirectoryProvider
+from fastmcp.server.providers.skills import SkillsDirectoryProvider
 from pathlib import Path
 
 mcp = FastMCP("Dynamic Skills")
 
 # 创建热重载的技能目录
 skills_provider = SkillsDirectoryProvider(
-    Path("./skills"),
+    roots=Path("./skills"),
     watch=True,  # 监控文件变化
     reload_interval=5  # 每 5 秒检查一次
 )
@@ -597,14 +597,14 @@ mcp.run()
 
 ```python
 from fastmcp import FastMCP
-from fastmcp.providers.skills import SkillsDirectoryProvider
+from fastmcp.server.providers.skills import SkillsDirectoryProvider
 from pathlib import Path
 
 mcp = FastMCP("Secure Skills")
 
 # 创建带权限的技能提供者
 skills_provider = SkillsDirectoryProvider(
-    Path("./skills"),
+    roots=Path("./skills"),
     allowed_skills=["pdf-processing", "code-review"],  # 白名单
     denied_skills=["experimental"]  # 黑名单
 )

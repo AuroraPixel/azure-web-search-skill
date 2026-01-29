@@ -10,7 +10,14 @@
       "Bash(git mv:*)",
       "Bash(git rm:*)",
       "Bash(python:*)",
-      "Bash(chcp:*)"
+      "Bash(chcp:*)",
+      "mcp__web-reader__webReader",
+      "Bash(timeout:*)",
+      "Bash(curl:*)",
+      "Bash($null)",
+      "Bash(Get-ChildItem \"d:\\remote\\web-search\\bin\" -File)",
+      "Bash(echo:*)",
+      "Bash(dir:*)"
     ],
     "deny": [],
     "ask": []

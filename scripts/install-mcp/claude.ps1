@@ -95,6 +95,9 @@ $mcpServerConfig = @{
         )
         env = @{
             PYTHONPATH = $ProjectPath
+            # 让 FastMCP Skills Provider 在 Windows 上按 UTF-8 读取 SKILL.md（避免 gbk 解码失败）
+            PYTHONUTF8 = "1"
+            PYTHONIOENCODING = "utf-8"
         }
     }
 }
