@@ -2,7 +2,13 @@
   "permissions": {
     "allow": [
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git tag:*)",
+      "Bash(New-Item -ItemType Directory -Force -Path \"docs\\getting-started\", \"docs\\guides\", \"docs\\development\", \"docs\\assets\\images\", \"docs\\assets\\diagrams\", \"scripts\\setup\", \"scripts\\install-mcp\", \"scripts\\run\", \"config-templates\\claude\", \"config-templates\\cursor\")",
+      "Bash(Out-Null)",
+      "Bash(Write-Host \"目录结构创建完成\")",
+      "Bash(git mv:*)",
+      "Bash(git rm:*)"
     ],
     "deny": [],
     "ask": []

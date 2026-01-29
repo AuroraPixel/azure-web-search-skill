@@ -1,251 +1,103 @@
-# 🎯 从这里开始 - Azure Web Search MCP Server
+# 从这里开始 🚀
 
-## 🎊 恭喜！你的项目现在支持 MCP Server！
-
-你的 web-search 项目已成功添加为 Claude Desktop 的 MCP Server。现在可以在 Claude 对话中直接使用 Azure Web Search 功能了！
+欢迎来到 Azure OpenAI Web Search 项目！本文档将帮助你快速找到所需的文档。
 
 ---
 
-## ⚡ 3 步快速开始
+## 🎯 我是新用户
 
-### 1️⃣ 安装依赖（2 分钟）
+### 我想快速体验功能
+- **30 秒快速开始** → [README.md 快速开始部分](README.md#-快速开始)
+- **第一次搜索教程** → [第一次搜索](docs/getting-started/first-search.md)
 
-打开 PowerShell，运行：
+### 我想了解项目功能
+- **项目概述** → [overview.md](docs/getting-started/overview.md)
+- **三种搜索模式对比** → [search-modes.md](docs/guides/search-modes.md)
 
-```powershell
-cd D:\remote\web-search
-uv pip install -e .
-```
+### 我想使用 MCP Server（推荐）
+- **MCP 快速开始** → [quickstart-mcp.md](docs/getting-started/quickstart-mcp.md)
+- **Claude Desktop 配置** → [mcp-setup.md](docs/guides/mcp-setup.md)
+- **Cursor 配置** → [cursor-setup.md](docs/guides/cursor-setup.md)
 
-这将安装所有必需的包，包括新添加的 `mcp` 包。
+### 我想作为 Python 库使用
+- **基础功能快速开始** → [quickstart.md](docs/getting-started/quickstart.md)
+- **API 参考文档** → [api-reference.md](docs/guides/api-reference.md)
 
-### 2️⃣ 运行安装脚本（1 分钟）
-
-```powershell
-.\install_mcp.ps1
-```
-
-脚本会自动：
-- ✅ 检查环境配置
-- ✅ 配置 Claude Desktop
-- ✅ 创建配置文件
-
-### 3️⃣ 启动使用（1 分钟）
-
-1. **重启 Claude Desktop**（完全退出并重新打开）
-
-2. **在 Claude 中测试**：
-   ```
-   使用 web search 搜索 "2026年人工智能发展趋势"
-   ```
-
-3. **享受强大的 Web Search！** 🎉
+### 我需要配置说明
+- **配置详解** → [configuration.md](docs/getting-started/configuration.md)
 
 ---
 
-## ✅ 验证安装（可选）
+## 👨‍💻 我是开发者
 
-运行测试脚本确保一切正常：
+### 我想搭建开发环境
+- **开发环境搭建** → [setup.md](docs/development/setup.md)
 
-```powershell
-python test_mcp_server.py
-```
+### 我想运行测试
+- **测试指南** → [testing.md](docs/development/testing.md)
 
-应该看到所有 5 个测试通过：
-```
-✓ 通过 - 基础依赖
-✓ 通过 - 环境配置
-✓ 通过 - Web Search 客户端
-✓ 通过 - MCP Server 文件
-✓ 通过 - Claude Desktop 配置
+### 我想贡献代码
+- **贡献指南** → [contributing.md](docs/development/contributing.md)
 
-通过: 5/5
-```
+### 我想了解架构
+- **架构设计说明** → [architecture.md](docs/guides/architecture.md)
 
 ---
 
-## 📚 使用示例
+## 📚 完整文档目录
 
-### 快速查询
-```
-搜索今天的科技新闻
-```
-
-### 复杂分析
-```
-分析人工智能在医疗领域的应用和挑战
-```
-
-### 地区特定
-```
-搜索美国地区关于 AI regulations 的最新政策
-```
-
-### 深度研究
-```
-对量子计算的最新进展进行深度研究
-```
+查看完整文档索引：[docs/README.md](docs/README.md)
 
 ---
 
-## 📖 更多信息
+## ❓ 快速问题
 
-### 文档快速导航
+### ⚡ 最快的开始方式？
 
-| 文档 | 用途 | 时间 |
-|------|------|------|
-| **[QUICKSTART_MCP.md](QUICKSTART_MCP.md)** | 最快速的开始指南 | 5 分钟 |
-| **[MCP_README.md](MCP_README.md)** | 功能总览和示例 | 10 分钟 |
-| **[MCP_SETUP.md](MCP_SETUP.md)** | 详细配置和故障排查 | 需要时查阅 |
+**使用 MCP Server**（3 步）：
+1. 运行安装脚本：`scripts/install-mcp/claude.ps1`（Windows）或 `claude.sh`（Unix）
+2. 重启 Claude Desktop
+3. 在对话中说："请使用 web search 搜索你的问题"
 
-### 新增的文件
+### 🔑 我需要什么？
 
-✅ **核心文件**
-- `mcp_server.py` - MCP Server 主程序
-- `install_mcp.ps1` / `.sh` - 自动安装脚本
-- `test_mcp_server.py` - 测试验证脚本
+- **Azure OpenAI 资源**（需要 Azure 账户）
+- **Python 3.10+**
+- **uv**（推荐）或 pip
 
-✅ **文档文件**
-- `MCP_SETUP.md` - 详细配置指南
-- `QUICKSTART_MCP.md` - 快速开始
-- `MCP_README.md` - 功能总览
-- `START_HERE.md` - 本文件
+### 💰 费用如何？
 
----
+- 每次 API 调用都会产生费用
+- Quick Search 最便宜
+- Deep Research 最贵（可能多次调用）
 
-## 🔧 可用工具
+### 🆘 遇到问题？
 
-你现在可以在 Claude 中使用 3 个强大的工具：
-
-### 1. web_search_quick ⚡⚡⚡
-**最快速的搜索**
-- 适合：快速查询、新闻、时效性信息
-- 速度：几秒钟
-
-### 2. web_search_agentic ⚡⚡
-**智能搜索**
-- 适合：复杂查询、需要分析的问题
-- 速度：10-30 秒
-
-### 3. web_search_deep ⚡
-**深度研究**
-- 适合：学术研究、全面分析
-- 速度：数分钟
+1. 查看 [配置详解](docs/getting-started/configuration.md)
+2. 检查 [常见问题](docs/getting-started/overview.md#常见问题)
+3. [提交 Issue](../../issues)
 
 ---
 
-## 🆘 遇到问题？
+## 🎓 学习路径建议
 
-### 问题 1：Claude 找不到工具
+### 初学者路径
+1. 📖 阅读 [项目概述](docs/getting-started/overview.md)
+2. 🚀 完成 [第一次搜索教程](docs/getting-started/first-search.md)
+3. ⚙️ 了解 [配置选项](docs/getting-started/configuration.md)
+4. 🔍 尝试 [不同搜索模式](docs/guides/search-modes.md)
 
-**解决方案**：
-1. 确保完全退出 Claude Desktop
-2. 检查任务管理器，确保进程已结束
-3. 重新打开 Claude Desktop
+### MCP 用户路径
+1. 🚀 阅读 [MCP 快速开始](docs/getting-started/quickstart-mcp.md)
+2. ⚙️ 完成 [MCP 详细配置](docs/guides/mcp-setup.md)
+3. 💬 在 Claude Desktop 中开始使用
 
-### 问题 2：工具调用失败
-
-**解决方案**：
-1. 检查 `.env` 文件配置
-2. 确认 Azure OpenAI API 密钥有效
-3. 运行：`python test_mcp_server.py`
-
-### 问题 3：配置文件问题
-
-**解决方案**：
-配置文件位置：
-```
-C:\Users\你的用户名\AppData\Roaming\Claude\claude_desktop_config.json
-```
-
-查看详细故障排查：[MCP_SETUP.md](MCP_SETUP.md)
+### 开发者路径
+1. 🛠️ 搭建 [开发环境](docs/development/setup.md)
+2. 🏗️ 了解 [项目架构](docs/guides/architecture.md)
+3. 🧪 运行 [测试](docs/development/testing.md)
+4. 🤝 查看 [贡献指南](docs/development/contributing.md)
 
 ---
 
-## 💡 提示和技巧
-
-### 最佳实践
-
-1. **指定搜索模式**：
-   ```
-   使用快速搜索查找...
-   使用智能搜索分析...
-   进行深度研究...
-   ```
-
-2. **指定地区**（可选）：
-   ```
-   搜索中国地区的...
-   查找美国的...
-   ```
-
-3. **自然语言**：
-   ```
-   帮我搜索...
-   查找关于...的信息
-   研究...的最新进展
-   ```
-
-### 费用提示
-
-⚠️ **注意**：
-- Web Search 功能会产生费用
-- 快速搜索最经济
-- 深度研究可能产生多次调用
-- 建议在 Azure 设置费用警报
-
----
-
-## 🎓 下一步
-
-1. ✅ 运行 `.\install_mcp.ps1`
-2. ✅ 重启 Claude Desktop
-3. ✅ 在 Claude 中测试搜索
-4. 📖 查看其他文档了解更多功能
-5. 🚀 在你的工作流中使用
-
----
-
-## 🌟 功能亮点
-
-- ✅ **无缝集成**：在 Claude 中自然使用
-- ✅ **多种模式**：适应不同需求
-- ✅ **自动引用**：所有结果带来源
-- ✅ **地理定位**：按国家/地区搜索
-- ✅ **一键安装**：自动化配置
-
----
-
-## 📞 需要帮助？
-
-### 查看文档
-- 快速问题：[QUICKSTART_MCP.md](QUICKSTART_MCP.md)
-- 故障排查：[MCP_SETUP.md](MCP_SETUP.md)
-- 功能详情：[MCP_README.md](MCP_README.md)
-
-### 运行测试
-```powershell
-python test_mcp_server.py
-```
-
-### 检查配置
-```powershell
-# 查看 Claude 配置文件
-notepad %APPDATA%\Claude\claude_desktop_config.json
-```
-
----
-
-## 🎉 就这么简单！
-
-现在你可以：
-1. 在 Claude Desktop 中使用 Azure Web Search
-2. 享受三种搜索模式
-3. 获得带引用的搜索结果
-4. 通过自然语言与搜索交互
-
-**准备好了吗？运行 `.\install_mcp.ps1` 开始吧！** 🚀
-
----
-
-**Made with ❤️ for Claude Desktop**
+**需要帮助？** 查看 [完整文档](docs/) 或 [提交 Issue](../../issues)

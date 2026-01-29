@@ -1,5 +1,69 @@
 # 更新日志
 
+## [2026-01-29] - 项目结构重组
+
+### 🎁 重大改进
+- **重组项目结构**：更清晰的目录组织和文档分类
+- **文档整合**：减少重复，统一信息源
+- **脚本分类**：按用途组织到 `scripts/` 目录
+- **配置模板**：统一管理在 `config-templates/` 目录
+
+### 📁 结构变更
+
+#### 新增目录
+- `docs/` - 所有文档分类存放
+  - `getting-started/` - 用户入门文档
+  - `guides/` - 使用指南
+  - `development/` - 开发者文档
+  - `assets/` - 文档资源
+- `scripts/` - 所有脚本文件
+  - `setup/` - 环境设置
+  - `install-mcp/` - MCP 安装
+  - `run/` - 运行脚本
+- `config-templates/` - 配置文件模板
+  - `claude/` - Claude Desktop 配置
+  - `cursor/` - Cursor 配置
+
+#### 文档迁移
+- `QUICKSTART.md` → `docs/getting-started/quickstart.md`
+- `QUICKSTART_MCP.md` → `docs/getting-started/quickstart-mcp.md`
+- `MCP_SETUP.md` → `docs/guides/mcp-setup.md`
+- `CURSOR_SETUP.md` → `docs/guides/cursor-setup.md`
+- `ARCHITECTURE.md` → `docs/guides/architecture.md`
+
+#### 文档整合（删除重复）
+- `MCP_README.md` - 内容已合并到 `README.md`
+- `CURSOR_README.md` - 内容已合并到 `README.md`
+
+#### 脚本迁移
+- `setup.ps1` / `setup.sh` → `scripts/setup/`
+- `install_mcp.ps1` → `scripts/install-mcp/claude.ps1`
+- `install_mcp_cursor.ps1` → `scripts/install-mcp/cursor.ps1`
+- `run.ps1` / `run.sh` → `scripts/run/`
+
+#### 配置文件迁移
+- `claude_desktop_config.json` → `config-templates/claude/mcp-server.json`
+- `.cursorrules_mcp` → `config-templates/cursor/mcp-rules.txt`
+
+### 📝 新增文档
+- `docs/README.md` - 文档索引
+- `scripts/README.md` - 脚本使用说明
+- `config-templates/README.md` - 配置说明
+- `START_HERE.md` - 快速导航指引（重写）
+- `REFACTORING_PLAN.md` - 重组规划文档
+
+### 🔧 文档更新
+- `README.md` - 简化结构，添加文档导航
+- 所有文档中的链接已更新到新路径
+
+### ✅ 改进效果
+- 根目录文件数从 20+ 减少到 < 10
+- 文档重复率显著降低
+- 更清晰的文档层次结构
+- 更专业的项目组织
+
+---
+
 ## [2026-01-28] - 新增 MCP Server 支持
 
 ### 🚀 重大新功能
@@ -14,26 +78,27 @@
    - 将 Web Search 功能封装为 Claude 可调用的工具
    - 支持异步操作和标准输入输出
 
-2. **`install_mcp.ps1`** / **`install_mcp.sh`** - 自动安装脚本
-   - Windows PowerShell 和 macOS/Linux Shell 脚本
-   - 自动配置 Claude Desktop
+2. **`scripts/install-mcp/`** - MCP 安装脚本
+   - `claude.ps1` / `claude.sh` - Claude Desktop 安装
+   - `cursor.ps1` / `cursor.sh` - Cursor 编辑器安装
+   - 自动配置 MCP Server
    - 一键安装所有依赖和配置
 
 3. **`test_mcp_server.py`** - MCP Server 测试脚本
    - 5 个全面的配置检查测试
    - 验证依赖、环境配置、客户端、服务器文件和 Claude 配置
 
-4. **`MCP_SETUP.md`** - 详细配置指南
+4. **`docs/guides/mcp-setup.md`** - 详细配置指南
    - 完整的 MCP Server 设置步骤
    - 故障排查指南
    - 使用示例和最佳实践
 
-5. **`QUICKSTART_MCP.md`** - MCP 快速开始指南
+5. **`docs/getting-started/quickstart-mcp.md`** - MCP 快速开始指南
    - 5 分钟快速配置指南
    - 简化的安装步骤
    - 常见问题和解决方案
 
-6. **`claude_desktop_config.json`** - Claude 配置示例
+6. **`config-templates/claude/mcp-server.json`** - Claude 配置示例
    - MCP Server 配置模板
    - 适用于不同操作系统
 
@@ -83,12 +148,17 @@
 
 #### 快速安装
 ```powershell
-# Windows
-.\install_mcp.ps1
+# Windows - Claude Desktop
+.\scripts\install-mcp\claude.ps1
 
-# macOS/Linux
-chmod +x install_mcp.sh
-./install_mcp.sh
+# Windows - Cursor
+.\scripts\install-mcp\cursor.ps1
+
+# macOS/Linux - Claude Desktop
+bash scripts/install-mcp/claude.sh
+
+# macOS/Linux - Cursor
+bash scripts/install-mcp/cursor.sh
 ```
 
 #### 验证安装

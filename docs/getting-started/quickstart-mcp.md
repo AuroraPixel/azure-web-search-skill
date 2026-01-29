@@ -34,13 +34,12 @@ AZURE_OPENAI_MODEL=gpt-4o
 
 ```powershell
 # Windows
-.\install_mcp.ps1
+.\scripts\install-mcp\claude.ps1
 ```
 
 ```bash
 # macOS/Linux
-chmod +x install_mcp.sh
-./install_mcp.sh
+bash scripts/install-mcp/claude.sh
 ```
 
 ## ✅ 验证安装
