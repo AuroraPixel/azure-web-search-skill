@@ -1,0 +1,23 @@
+{
+  "id": "azure-web-search-mcp",
+  "name": "Azure Web Search (MCP StreamableHTTP)",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "mcpUrl": {
+        "type": "string",
+        "description": "Streamable HTTP MCP endpoint (e.g. http://127.0.0.1:8000/mcp)."
+      },
+      "timeoutMs": {
+        "type": "number",
+        "description": "Optional tool call timeout in milliseconds."
+      }
+    }
+  },
+  "uiHints": {
+    "mcpUrl": { "label": "MCP URL", "placeholder": "http://127.0.0.1:8000/mcp" },
+    "timeoutMs": { "label": "Timeout (ms)", "placeholder": "30000" }
+  }
+}
+
