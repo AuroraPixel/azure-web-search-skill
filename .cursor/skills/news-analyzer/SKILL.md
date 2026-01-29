@@ -97,19 +97,19 @@ Use `web_search_agentic` for in-depth analysis:
 ```markdown
 # News Analysis: [Topic]
 
-## 📰 Latest Reports
+## Latest Reports
 
 ### 1. [Title]
 - **Time**: [Publication time]
 - **Source**: [Media name]
 - **Link**: [URL]
 - **Core Content**: [Summary]
-- **Timeliness**: ⭐ Latest
+- **Timeliness**: Latest
 
 ### 2. [Title]
 ...
 
-## 🔍 Deep Analysis
+## Deep Analysis
 
 ### Event Overview
 - **Timeline**: [Development context]
@@ -131,7 +131,7 @@ Use `web_search_agentic` for in-depth analysis:
 - **Related Events**: ...
 - **Deep Causes**: ...
 
-## 📈 Trends and Impact
+## Trends and Impact
 
 ### Short-term Impact
 - Impact 1
@@ -145,18 +145,18 @@ Use `web_search_agentic` for in-depth analysis:
 - Related event 1
 - Related event 2
 
-## 🎯 Key Points
+## Key Points
 
 1. Point 1
 2. Point 2
 3. Point 3
 
-## 📊 Source Reliability
+## Source Reliability
 
 | Source | Reliability | Timeliness | Notes |
 |--------|-------------|------------|-------|
-| Source1 | ⭐⭐⭐ | Latest | Official statement |
-| Source2 | ⭐⭐ | 1 day ago | Industry analysis |
+| Source1 | High | Latest | Official statement |
+| Source2 | Medium | 1 day ago | Industry analysis |
 ```
 
 ## Best Practices
@@ -243,207 +243,10 @@ web_search_agentic("Quantum computing development status and challenges")
 web_search_agentic("Different companies' positions on AI safety")
 ```
 
-## News Classification
-
-### By Timeliness
-
-#### Real-time News (Past 1 hour)
-- Breaking events
-- Instant reports
-- Quick updates
-
-**Tool**: `web_search_quick`
-
-#### Latest News (Past 24 hours)
-- Daily news
-- Important events
-- Official statements
-
-**Tool**: `web_search_quick` + `web_search_agentic`
-
-#### Recent News (Past 7 days)
-- Weekly summary
-- Trend analysis
-- Deep reports
-
-**Tool**: `web_search_agentic`
-
-### By Topic
-
-#### Technology News
-- Product releases
-- Technology breakthroughs
-- Company updates
-
-#### Financial News
-- Market dynamics
-- Company earnings
-- Economic data
-
-#### Policy News
-- Policy releases
-- Regulation changes
-- Government statements
-
-#### Social News
-- Social events
-- Cultural phenomena
-- Public issues
-
-## Analysis Strategies
-
-### Strategy 1: Quick Tracking
-
-```
-Step 1: quick - Get latest reports
-Step 2: quick - Verify key facts
-Step 3: quick - Track updates
-```
-
-**Best For**: Breaking events, real-time monitoring
-
-### Strategy 2: Deep Analysis
-
-```
-Step 1: quick - Quickly understand event
-Step 2: agentic - Deep analysis of background
-Step 3: quick - Get latest progress
-```
-
-**Best For**: Complex events, trend analysis
-
-### Strategy 3: Multi-Source Comparison
-
-```
-Step 1: quick - Get broad coverage
-Step 2: agentic - Compare different angles
-Step 3: agentic - Synthesize analysis
-```
-
-**Best For**: Controversial topics, multiple viewpoints
-
-## Common Use Cases
-
-### Use Case 1: Tech News Tracking
-
-**Topic**: "Apple Vision Pro Release"
-
-**Process**:
-1. `quick` - Get launch information
-2. `agentic` - Analyze product features and impact
-3. `quick` - Track market reaction
-
-**Output**: Complete product launch analysis
-
-### Use Case 2: Policy Analysis
-
-**Topic**: "EU AI Act Latest Progress"
-
-**Process**:
-1. `quick` - Get latest policy updates
-2. `agentic` - Analyze policy content and impact
-3. `agentic` - Compare policies across different regions
-
-**Output**: Deep policy analysis report
-
-### Use Case 3: Industry Trends
-
-**Topic**: "2026 Electric Vehicle Market"
-
-**Process**:
-1. `quick` - Get latest market data
-2. `agentic` - Analyze industry trends and drivers
-3. `agentic` - Predict future directions
-
-**Output**: Industry trend analysis report
-
-## Source Evaluation
-
-### Reliability Levels
-
-#### ⭐⭐⭐ High Reliability
-- Official news agencies (AP, Reuters, Xinhua)
-- Mainstream media (BBC, CNN, Caixin)
-- Official government statements
-- Company official releases
-
-#### ⭐⭐ Medium Reliability
-- Professional industry media
-- Major financial media
-- Authoritative blogs
-- Expert opinions
-
-#### ⭐ Requires Verification
-- Social media rumors
-- Anonymous sources
-- Unofficial statements
-- Niche websites
-
-### Evaluation Criteria
-
-- **Accuracy**: Are facts accurate?
-- **Timeliness**: Is information latest?
-- **Objectivity**: Is there bias?
-- **Completeness**: Is information complete?
-- **Verifiability**: Can other sources corroborate?
-
-## Region Settings
-
-Use `country` parameter to get region-specific news:
-
-```python
-# China news
-web_search_quick("China headlines", country="CN")
-
-# US news
-web_search_quick("US news", country="US")
-
-# Japan news
-web_search_quick("Japan news", country="JP")
-
-# Europe news
-web_search_quick("Europe news", country="GB")
-```
-
-## Quality Standards
-
-### Standards for Excellent News Analysis
-
-- ✅ **Timeliness**: Information is latest
-- ✅ **Accuracy**: Facts are accurate
-- ✅ **Comprehensiveness**: Multi-angle coverage
-- ✅ **Depth**: Has in-depth analysis
-- ✅ **Verifiability**: Sources are reliable
-
-### Analysis Quality Checklist
-
-- [ ] Is information latest?
-- [ ] Are sources reliable?
-- [ ] Were key facts cross-validated?
-- [ ] Were multiple angles analyzed?
-- [ ] Were timestamps tagged?
-- [ ] Were facts distinguished from opinions?
-
-## Limitations and Notes
-
-### Tool Limitations
-
-- **Quick Search**: Fast information retrieval but no deep analysis
-- **Agentic Search**: Deep analysis but requires more time
-- **Regional Differences**: Search results may vary by region
-
-### Usage Recommendations
-
-- News changes quickly, pay attention to timeliness
-- Cross-validate important information
-- Focus on official sources
-- Understand media bias
-- Maintain objective attitude
-
 ## Related Resources
 
-- [FastMCP Guide](../../docs/guides/fastmcp-guide.md)
-- [MCP Setup Guide](../../docs/guides/mcp-setup.md)
+- [FastMCP Guide](../../../../docs/guides/fastmcp-guide.md)
+- [MCP Setup Guide](../../../../docs/guides/mcp-setup.md)
 
 ## Version History
 

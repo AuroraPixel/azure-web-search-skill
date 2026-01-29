@@ -98,10 +98,10 @@ Use `web_search_agentic` for in-depth analysis:
 ```markdown
 # Research Topic: [Topic Name]
 
-## 📋 Overview
+## Overview
 [Brief overview from quick search]
 
-## 🔍 Key Findings
+## Key Findings
 
 ### Finding 1: [Title]
 - **Content**: Detailed description
@@ -111,7 +111,7 @@ Use `web_search_agentic` for in-depth analysis:
 ### Finding 2: [Title]
 ...
 
-## 📊 Different Perspectives
+## Different Perspectives
 
 ### Perspective A
 - **Supporting Evidence**: ...
@@ -120,19 +120,19 @@ Use `web_search_agentic` for in-depth analysis:
 ### Perspective B
 ...
 
-## 💡 Conclusions
+## Conclusions
 
 Based on the above research, the main conclusions are:
 - Conclusion 1
 - Conclusion 2
 
-## 📚 References
+## References
 
 1. [Source 1](URL) - [Brief description]
 2. [Source 2](URL) - [Brief description]
 ...
 
-## ⏰ Information Timeliness
+## Information Timeliness
 
 - Latest information: [Date]
 - Main source time range: [Range]
@@ -218,127 +218,12 @@ web_search_agentic("Applications and challenges of quantum computing in cryptogr
 web_search_agentic("Impact of AI on job market", country="US")
 ```
 
-## Research Strategies
-
-### Strategy 1: Progressive Research
-
-```
-Step 1: quick - Understand topic
-Step 2: quick - Find key terms
-Step 3: agentic - Deep analysis
-Step 4: quick - Verify specific facts
-```
-
-### Strategy 2: Comparative Analysis
-
-```
-Step 1: quick - Get basic information
-Step 2: agentic - Analyze different perspectives
-Step 3: Integrate comparison results
-```
-
-### Strategy 3: Timeliness Tracking
-
-```
-Step 1: quick - Get latest information
-Step 2: agentic - Analyze trends and changes
-Step 3: quick - Verify specific updates
-```
-
-## Common Use Cases
-
-### Technical Research
-
-**Topic**: "Rust vs Go performance comparison"
-
-**Process**:
-1. `quick` - Get basic performance data
-2. `agentic` - Deep analysis of performance differences
-3. `quick` - Find latest benchmarks
-
-**Output**: Complete technical comparison report
-
-### Market Analysis
-
-**Topic**: "2026 electric vehicle market trends"
-
-**Process**:
-1. `quick` - Get latest market data
-2. `agentic` - Analyze driving factors and challenges
-3. Synthesize into market report
-
-**Output**: Comprehensive market analysis
-
-### Academic Research
-
-**Topic**: "Machine learning in medical diagnosis"
-
-**Process**:
-1. `quick` - Understand application overview
-2. `agentic` - Deep analysis of technical details
-3. `quick` - Find latest research papers
-
-**Output**: Academic research summary
-
-## Quality Standards
-
-### Standards for Excellent Research
-
-- ✅ **Accuracy**: Information is accurate and reliable
-- ✅ **Completeness**: Covers main aspects
-- ✅ **Timeliness**: Information is relatively new
-- ✅ **Verifiability**: Provides sources
-- ✅ **Balance**: Multi-angle analysis
-
-### Research Quality Checklist
-
-- [ ] Used appropriate tools?
-- [ ] Information sources are reliable?
-- [ ] Verified key facts?
-- [ ] Tagged timeliness?
-- [ ] Provided complete citations?
-- [ ] Conclusions based on evidence?
-
-## Configuration Recommendations
-
-### Country Code Settings
-
-For region-specific information, use the `country` parameter:
-
-- `US` - United States information
-- `CN` - China information
-- `JP` - Japan information
-- `GB` - United Kingdom information
-- `DE` - Germany information
-
-Examples:
-```
-web_search_quick("China new energy vehicle policy", country="CN")
-web_search_agentic("US AI regulation policy", country="US")
-```
-
-## Limitations and Notes
-
-### Tool Limitations
-
-- **Quick Search**: No reasoning, suitable for simple queries
-- **Agentic Search**: Requires more time but provides deeper analysis
-- **No Deep Research Mode**: Removed, focused on two core search modes
-
-### Usage Recommendations
-
-- Choose tools wisely, avoid overusing agentic search
-- Pay attention to information timeliness
-- Verify important information
-- Cite all sources
-
 ## Related Resources
 
-- [Web Search API Documentation](https://learn.microsoft.com/en-us/azure/ai-services/openai/referencing-material)
-- [FastMCP Guide](../../docs/guides/fastmcp-guide.md)
-- [MCP Setup Guide](../../docs/guides/mcp-setup.md)
+- [FastMCP Guide](../../../../docs/guides/fastmcp-guide.md)
+- [MCP Setup Guide](../../../../docs/guides/mcp-setup.md)
 
 ## Version History
 
-- **v2.0.0** (2026-01-29): Removed deep research, focused on web search
+- **v2.0.0** (2026-01-29): Removed deep research, focused on two core search modes
 - **v1.0.0** (2026-01-29): Initial version

@@ -80,8 +80,8 @@ skills/
 Skills are exposed as MCP resources, accessible via URIs:
 
 ```
-skill://research-assistant
-skill://news-analyzer
+skill://research-assistant/SKILL.md
+skill://news-analyzer/SKILL.md
 ```
 
 ### Using in Claude Desktop
@@ -248,9 +248,8 @@ Can be modified in `setup_skills_provider()`.
 
 ## 📚 Related Documentation
 
-- [FastMCP Complete Guide](../docs/guides/fastmcp-guide.md)
+- [FastMCP Guide](../docs/guides/fastmcp-guide.md)
 - [MCP Setup Guide](../docs/guides/mcp-setup.md)
-- [API Reference](../docs/guides/api-reference.md)
 - [Main README](../README.md)
 
 ## 🎓 Best Practices
